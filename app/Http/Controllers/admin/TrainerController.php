@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Exports\TrainersExport;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Trainer;
-use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use function abort;
+use function view;
 
 class TrainerController extends Controller
 {
-    // عرض قائمة المدربين
     public function index()
     {
         $trainers = Trainer::all();
         return view('trainers.index', compact('trainers'));
     }
 
-    // تصدير المدربين
     public function export($type)
     {
         switch ($type) {
@@ -25,31 +25,22 @@ class TrainerController extends Controller
                 return $this->exportAsPdf();
             case 'excel':
                 return $this->exportAsExcel();
-            case 'csv':
-                return $this->exportAsCsv();
-            default:
+                default:
                 abort(404, 'نوع التصدير غير مدعوم');
         }
     }
 
-    // تصدير كـ PDF
     private function exportAsPdf()
     {
         $trainers = Trainer::all();
-        $pdf = Pdf::loadView('trainers.export_pdf', compact('trainers')); // قم بإنشاء صفحة HTML للتصدير
+        $pdf = Pdf::loadView('trainers.pdf', compact('trainers'));
         return $pdf->download('trainers.pdf');
     }
 
-    // تصدير كـ Excel
     private function exportAsExcel()
     {
 
-        return Excel::download(new TrainersExport, 'trainers.xlsx'); // استخدم Export Class
+        return Excel::download(new TrainersExport, 'trainers.xlsx');
     }
 
-    // تصدير كـ CSV
-    private function exportAsCsv()
-    {
-        return Excel::download(new TrainersExport, 'trainers.csv'); // استخدم نفس Export Class
-    }
 }

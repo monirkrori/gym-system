@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Activitie;
-use App\Models\User;
+use App\Models\Activity;
+use App\Models\AttendanceLog;
+use App\Models\MembershipPackage;
 use App\Models\Trainer;
 use App\Models\TrainingSession;
 use App\Models\UserMembership;
-use App\Models\AttendanceLog;
-use App\Models\MembershipPackage;
-use App\Models\Activity;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use function collect;
+use function view;
 
 class DashboardController extends Controller
 {
