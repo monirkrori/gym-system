@@ -12,50 +12,86 @@
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-
     <!-- Custom CSS -->
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #34495e;
+            --background-light: #f4f6f7;
+            --text-color: #2c3e50;
+        }
+
         body {
             font-family: 'Cairo', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .sidebar {
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
             min-height: 100vh;
-            background-color: #2c3e50;
-            color: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         .sidebar .nav-link {
             color: #ecf0f1;
             padding: 0.8rem 1rem;
             margin-bottom: 0.2rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
 
         .sidebar .nav-link:hover {
-            background-color: #34495e;
+            background-color: rgba(255,255,255,0.1);
+            transform: translateX(-5px);
         }
 
         .sidebar .nav-link.active {
-            background-color: #3498db;
+            background-color: var(--primary-color);
+            font-weight: bold;
         }
 
         .content-wrapper {
-            min-height: 100vh;
-            background-color: #f8f9fa;
+            background-color: var(--background-light);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .stats-card {
-            transition: transform 0.3s;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         .stats-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
         .notification-dropdown {
             max-height: 300px;
             overflow-y: auto;
         }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+
     </style>
 
     @stack('styles')
@@ -66,68 +102,82 @@
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2 px-0 sidebar">
             <div class="py-4 text-center">
-                <h4>نادي الرياضة</h4>
+                <h4 class="text-white">نادي الرياضة</h4>
             </div>
 
             <nav class="mt-2">
                 <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                            <i class="bi bi-speedometer2 me-2"></i>
-                            لوحة التحكم
-                        </a>
-                    </li>
-
-
+                    @can('view_dashboard')
                         <li class="nav-item">
-                            <a href= '/admin/memberships' class="nav-link">
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                لوحة التحكم
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('view_members')
+                        <li class="nav-item">
+                            <a href='/admin/memberships' class="nav-link">
                                 <i class="bi bi-people me-2"></i>
                                 الأعضاء
                             </a>
                         </li>
+                    @endcan
 
+                    @can('view-trainer')
                         <li class="nav-item">
                             <a href='/admin/trainers' class="nav-link">
                                 <i class="bi bi-person-workspace me-2"></i>
                                 المدربين
                             </a>
                         </li>
+                    @endcan
 
+                    @can('view-training')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-calendar-event me-2"></i>
                                 الجلسات التدريبية
                             </a>
                         </li>
+                    @endcan
 
+                    @can('view-equipment')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-bicycle me-2"></i>
                                 الأجهزة الرياضية
                             </a>
                         </li>
+                    @endcan
 
+                    @can('view-memberships')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-card-checklist me-2"></i>
                                 العضويات
                             </a>
                         </li>
+                    @endcan
 
+                    @can('view-meal-plans')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-cup-hot me-2"></i>
                                 خطط الوجبات
                             </a>
                         </li>
+                    @endcan
 
+                    @can('view-reports')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="bi bi-graph-up me-2"></i>
                                 التقارير
                             </a>
                         </li>
-
+                    @endcan
                 </ul>
             </nav>
         </div>
@@ -142,42 +192,35 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto">
-                         {{--   <!-- Notifications -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
-                                    <i class="bi bi-bell"></i>
-                                    <span class="badge bg-danger">{{ # }}</span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end notification-dropdown">
-                                    @forelse(auth()->user()->notifications()->latest()->take(5)->get() as $notification)
-                                        <a href="#" class="dropdown-item {{ $notification->read_at ? '' : 'bg-light' }}">
-                                            <h6 class="mb-0">{{ $notification->title }}</h6>
-                                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
-                                        </a>
-                                    @empty
-                                        <div class="dropdown-item text-center">لا توجد إشعارات</div>
-                                    @endforelse
-                                    <div class="dropdown-divider"></div>
-                                    <a href="{{ route('notifications.index') }}" class="dropdown-item text-center">عرض كل الإشعارات</a>
-                                </div>
-                            </li>--}}
+                        <ul class="navbar-nav ms-auto align-items-center">
+                            <!-- Notifications (Commented out for now) -->
+                        {{-- Notification dropdown code remains the same --}}
 
-                            <!-- User Menu -->
+                        <!-- User Menu -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                    <img src="#"
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <img src="{{ auth()->user()->profile_picture ?? '#' }}"
                                          class="rounded-circle me-2"
                                          alt="صورة المستخدم"
                                          width="32"
                                          height="32">
-                                    {{ auth()->user()->name }}
+                                    <span>{{ auth()->user()->name }}</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="{{route('admin.profile.edit')}}">
-                                        <i class="bi bi-person me-2"></i>
-                                        الملف الشخصي
-                                    </a>
+                                    @can('edit_profile')
+                                        <a class="dropdown-item" href="{{route('admin.profile.edit')}}">
+                                            <i class="bi bi-person me-2"></i>
+                                            الملف الشخصي
+                                        </a>
+                                    @endcan
+
+                                    @can('manage_users')
+                                        <a class="dropdown-item" href="{{route('admin.users.index')}}">
+                                            <i class="bi bi-people me-2"></i>
+                                            إدارة المستخدمين
+                                        </a>
+                                    @endcan
+
                                     <div class="dropdown-divider"></div>
                                     <form action="{{ route('logout') }}" method="POST">
                                         @csrf
@@ -215,9 +258,58 @@
     </div>
 </div>
 
+<!-- Dark Mode Toggle -->
+<div class="dark-mode-toggle">
+    <button id="darkModeToggle" class="btn btn-secondary">
+        <i class="bi bi-moon"></i>
+    </button>
+</div>
+
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // DOM Elements
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    // Apply stored theme on page load
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') {
+        enableDarkMode();
+    } else {
+        disableDarkMode();
+    }
+
+    // Event Listener for Toggle
+    darkModeToggle.addEventListener('click', () => {
+        if (body.classList.contains('dark-mode')) {
+            disableDarkMode();
+        } else {
+            enableDarkMode();
+        }
+    });
+
+    // Enable Dark Mode
+    function enableDarkMode() {
+        body.classList.add('dark-mode');
+        document.documentElement.style.setProperty('--background-light', '#1a1a2e');
+        document.documentElement.style.setProperty('--text-color', '#e0e0e0');
+        darkModeToggle.innerHTML = '<i class="bi bi-sun"></i>';
+        localStorage.setItem('theme', 'dark'); // Save theme to local storage
+    }
+
+    // Disable Dark Mode
+    function disableDarkMode() {
+        body.classList.remove('dark-mode');
+        document.documentElement.style.setProperty('--background-light', '#f4f6f7');
+        document.documentElement.style.setProperty('--text-color', '#2c3e50');
+        darkModeToggle.innerHTML = '<i class="bi bi-moon"></i>';
+        localStorage.setItem('theme', 'light'); // Save theme to local storage
+    }
+</script>
+
+
 @stack('scripts')
 </body>
 </html>

@@ -2,92 +2,127 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // عرض الأعضاء
-    public function index(Request $request)
+    /**
+     * Instantiate a new UserController instance.
+     */
+    public function __construct()
     {
-        $query = User::query();
+        $this->middleware('auth');
+        $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index','show']]);
+        $this->middleware('permission:create-user', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-user', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-user', ['only' => ['destroy']]);
+    }
 
-        // البحث حسب اسم العضو
-        if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'like', '%' . $request->search . '%');
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): View
+    {
+        return view('users.index', [
+            'users' => User::latest('id')->paginate(3)
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): View
+    {
+        return view('users.create', [
+            'roles' => Role::pluck('name')->all()
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreUserRequest $request): RedirectResponse
+    {
+        $input = $request->all();
+        $input['password'] = Hash::make($request->password);
+
+        $user = User::create($input);
+        $user->assignRole($request->roles);
+
+        return redirect()->route('users.index')
+            ->withSuccess('New user is added successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user): View
+    {
+        return view('users.show', [
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(User $user): View
+    {
+        // Check Only Super Admin can update his own Profile
+        if ($user->hasRole('Super Admin')){
+            if($user->id != auth()->user()->id){
+                abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
+            }
         }
 
-        // تصفية حسب حالة العضو (نشط أو غير نشط)
-        if ($request->has('status') && $request->status != 'الكل') {
-            $query->where('status', $request->status);
+        return view('users.edit', [
+            'user' => $user,
+            'roles' => Role::pluck('name')->all(),
+            'userRoles' => $user->roles->pluck('name')->all()
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    {
+        $input = $request->all();
+
+        if(!empty($request->password)){
+            $input['password'] = Hash::make($request->password);
+        }else{
+            $input = $request->except('password');
         }
 
-        // جلب الأعضاء مع التصفية والبحث
-        $members = $query->paginate(10);
+        $user->update($input);
 
-        return view('members.index', compact('members'));
+        $user->syncRoles($request->roles);
+
+        return redirect()->back()
+            ->withSuccess('User is updated successfully.');
     }
 
-    // عرض صفحة إضافة عضو جديد
-    public function create()
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user): RedirectResponse
     {
-        return view('members.create');
-    }
+        // About if user is Super Admin or User ID belongs to Auth User
+        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id)
+        {
+            abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
+        }
 
-    // إضافة عضو جديد
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
-            'subscription_type' => 'required|string|max:255',
-            'expiration_date' => 'required|date',
-            'status' => 'required|string',
-        ]);
-
-        User::create($request->all());
-
-        return redirect()->route('members.index')->with('success', 'تم إضافة العضو بنجاح');
-    }
-
-    // عرض صفحة تعديل العضو
-    public function edit($id)
-    {
-        $member = User::findOrFail($id);
-        return view('members.edit', compact('member'));
-    }
-
-    // تحديث بيانات العضو
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:15',
-            'subscription_type' => 'required|string|max:255',
-            'expiration_date' => 'required|date',
-            'status' => 'required|string',
-        ]);
-
-        $member = User::findOrFail($id);
-        $member->update($request->all());
-
-        return redirect()->route('members.index')->with('success', 'تم تحديث العضو بنجاح');
-    }
-
-    // حذف العضو
-    public function destroy($id)
-    {
-        $member = User::findOrFail($id);
-        $member->delete();
-
-        return redirect()->route('members.index')->with('success', 'تم حذف العضو بنجاح');
-    }
-
-    // تصدير البيانات
-    public function export()
-    {
-        // يمكنك إضافة منطق التصدير هنا
-        // على سبيل المثال تصدير البيانات إلى ملف Excel أو CSV
+        $user->syncRoles([]);
+        $user->delete();
+        return redirect()->route('users.index')
+            ->withSuccess('User is deleted successfully.');
     }
 }

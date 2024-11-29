@@ -4,21 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Profile extends Model
+class Activity extends Model
 {
-    use  SoftDeletes;
+    use HasFactory;
 
-
+    // الأعمدة القابلة للتعبئة
     protected $fillable = [
         'user_id',
-        'phone_number',
-        'address',
-        'date_of_birth',
-        'profile_image',
+        'description',
+        'type',
+        'status',
     ];
-
 
     // العلاقة مع المستخدم
     public function user()
@@ -26,7 +23,3 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 }
-
-
-
-

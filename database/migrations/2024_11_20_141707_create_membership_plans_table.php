@@ -17,10 +17,9 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->integer('duration_days');
             $table->text('description')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->enum('status',['active','expired'])->default('active');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
