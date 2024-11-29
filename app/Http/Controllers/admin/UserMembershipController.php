@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin;
 use App\Exports\UserMembershipsExport;
 use App\Exports\UserMembershipsPdfExport;
 use App\Http\Controllers\Controller;
+use App\Models\MembershipPackage;
+use App\Models\MembershipPlan;
+use App\Models\User;
 use App\Models\UserMembership;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -31,23 +34,32 @@ class UserMembershipController extends Controller
     // عرض صفحة إنشاء عضوية جديدة
     public function create()
     {
-        return view('memberships.create');
+        $this->authorize('create-membership');
+
+        // جلب المستخدمين والباقات لإنشاء العضوية
+        $users = User::all();
+        $packages = MembershipPlan::all();
+
+        return view('memberships.create', compact('users', 'packages'));
     }
 
     // حفظ عضوية جديدة
     public function store(Request $request)
     {
+        $this->authorize('create-membership');
+
+        // التحقق من البيانات
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'is_active' => 'required|boolean',
+            'user_id' => 'required|exists:users,id',
+            'package_id' => 'required|',
+            'status' => 'required|in:active,expired',
         ]);
 
+        // إنشاء العضوية
         UserMembership::create($validated);
 
-        return redirect()->route('memberships.index')->with('success', 'تم إضافة العضوية بنجاح!');
+        return redirect()->route('admin.memberships.index')->with('success', 'تم إنشاء العضوية بنجاح!');
     }
-
     // عرض تفاصيل عضوية
     public function show(UserMembership $membership)
     {

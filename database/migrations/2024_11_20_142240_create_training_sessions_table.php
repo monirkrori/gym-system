@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('trainer_id')->constrained('trainers')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('type', ['group', 'personal'])->default('group');
+            $table->enum('type', ['group', 'personal','free'])->default('group');
             $table->enum('difficulty_level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
             $table->dateTime('start_time');
             $table->dateTime('end_time');

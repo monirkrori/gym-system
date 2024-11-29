@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('membership_packages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('plan_id')->constrained('membership_plans')->onDelete('cascade');
             $table->string('name');
             $table->decimal('price', 8, 2);
             $table->integer('duration_days');
             $table->integer('max_training_sessions')->default(0);
-            $table->enum('difficulty_level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

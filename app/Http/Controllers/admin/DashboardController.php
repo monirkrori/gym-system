@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activitie;
 use App\Models\Activity;
 use App\Models\AttendanceLog;
 use App\Models\MembershipPackage;
@@ -86,7 +85,7 @@ class DashboardController extends Controller
             });
 
         // Get latest activities
-        $latestActivities = Activitie::with('user')
+        $latestActivities = Activity::with('user')
             ->latest()
             ->take(10)
             ->get();
@@ -96,6 +95,42 @@ class DashboardController extends Controller
             ->whereDate('start_time', Carbon::today())
             ->orderBy('start_time')
             ->get();
+
+        $membershipStats = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $membershipStats->push([
+                'month' => $date->format('M'),
+                'year' => $date->format('Y'),
+                'new_members' => UserMembership::whereMonth('user_memberships.created_at', $date->month)
+                    ->whereYear('user_memberships.created_at', $date->year)
+                    ->count(),
+                'expired_members' => UserMembership::where('status', 'expired')
+                    ->whereMonth('user_memberships.end_date', $date->month)
+                    ->whereYear('user_memberships.end_date', $date->year)
+                    ->count(),
+                'net_change' => UserMembership::whereMonth('user_memberships.created_at', $date->month)
+                        ->whereYear('user_memberships.created_at', $date->year)
+                        ->count() -
+                    UserMembership::where('status', 'expired')
+                        ->whereMonth('user_memberships.end_date', $date->month)
+                        ->whereYear('user_memberships.end_date', $date->year)
+                        ->count()
+            ]);
+        }
+
+        // Add color coding for package distribution
+        $packageDistribution = MembershipPackage::withCount(['userMemberships as count'])
+            ->having('count', '>', 0)
+            ->get()
+            ->map(function ($package) {
+                return [
+                    'name' => $package->name,
+                    'count' => $package->count,
+                    'color' => $this->generateColorForPackage($package->name)
+                ];
+            });
+
 
         return view('dashboard.index', compact(
             'activeMembers',
@@ -108,7 +143,28 @@ class DashboardController extends Controller
             'membershipStats',
             'packageDistribution',
             'latestActivities',
-            'todaySchedule'
+            'todaySchedule',
+            'membershipStats',
+            'packageDistribution'
         ));
     }
+
+    private function generateColorForPackage($packageName)
+    {
+
+        $colors = [
+            '#3498db', // Blue
+            '#2ecc71', // Green
+            '#f1c40f', // Yellow
+            '#e74c3c', // Red
+            '#9b59b6', // Purple
+            '#1abc9c', // Turquoise
+            '#34495e', // Dark Blue-Gray
+        ];
+
+        // Generate a consistent index based on package name
+        $index = abs(crc32($packageName)) % count($colors);
+        return $colors[$index];
+    }
 }
+

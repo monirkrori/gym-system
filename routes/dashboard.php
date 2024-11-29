@@ -5,6 +5,8 @@ use App\Http\Controllers\admin\EquipmentController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\TrainerController;
 use App\Http\Controllers\admin\UserMembershipController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +35,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('trainers',TrainerController::class);
         Route::get('trainers/exports/{type}' , [TrainerController::class,'export'])->name('trainers.export');
         Route::resource('equipments', EquipmentController::class);
+        Route::resources([
+            'roles' => RoleController::class,
+            'users' => UserController::class,
+        ]);
 
 
     });
