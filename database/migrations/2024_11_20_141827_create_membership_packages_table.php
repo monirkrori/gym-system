@@ -18,9 +18,8 @@ return new class extends Migration
             $table->integer('duration_days');
             $table->integer('max_training_sessions')->default(0);
             $table->text('description')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->enum('status',['active','expired'])->default('active');
             $table->timestamps();
-
             $table->softDeletes();
         });
     }

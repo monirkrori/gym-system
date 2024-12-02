@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\dashboard;
 
 use App\Exports\UserMembershipsExport;
 use App\Exports\UserMembershipsPdfExport;
 use App\Http\Controllers\Controller;
 use App\Models\MembershipPackage;
 use App\Models\MembershipPlan;
+use App\Models\Trainer;
 use App\Models\User;
 use App\Models\UserMembership;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use function redirect;
@@ -26,7 +28,7 @@ class UserMembershipController extends Controller
         $expiredMembers = UserMembership::where('status', 'expired')->count(); // العضويات المنتهية
 
         // جلب العضويات مع بيانات المستخدم والباقات
-        $memberships = UserMembership::with(['user', 'package'])->paginate(10);
+        $memberships = UserMembership::with(['user', 'package','plan'])->paginate(10);
 
         return view('memberships.index', compact('memberships', 'totalMembers', 'activeMembers', 'expiredMembers'));
     }
@@ -36,11 +38,11 @@ class UserMembershipController extends Controller
     {
         $this->authorize('create-membership');
 
-        // جلب المستخدمين والباقات لإنشاء العضوية
         $users = User::all();
-        $packages = MembershipPlan::all();
+        $plans = MembershipPlan::all();
+        $packages = MembershipPackage::all();
 
-        return view('memberships.create', compact('users', 'packages'));
+        return view('memberships.create', compact('users', 'plans', 'packages'));
     }
 
     // حفظ عضوية جديدة
@@ -48,15 +50,49 @@ class UserMembershipController extends Controller
     {
         $this->authorize('create-membership');
 
-        // التحقق من البيانات
-        $validated = $request->validate([
+        $request->validate([
             'user_id' => 'required|exists:users,id',
+            'plan_id' => 'required|',
             'package_id' => 'required|',
-            'status' => 'required|in:active,expired',
+            'start_date' => 'required',
         ]);
 
-        // إنشاء العضوية
-        UserMembership::create($validated);
+
+
+        $plan = MembershipPlan::find($request->plan_id);
+        $endDate = Carbon::parse($request->start_date)->addMonths($plan->duration_month);
+        $user = User::find($request->user_id);
+
+        $membership = UserMembership::where('user_id', $user->id)->first();
+        $trainer = Trainer::where('user_id', $user->id)->first();
+        if ($trainer ){
+            $trainer->delete();
+            UserMembership::create([
+                'user_id' => $request->user_id,
+                'package_id' => $request->package_id,
+                'plan_id' => $request->plan_id,
+                'start_date' => $request->start_date,
+                'end_date' => $endDate,
+            ]);
+
+            $user->removeRole('trainer');
+            $user->assignRole('member');
+        }
+
+        elseif($membership){
+            return redirect()->back()->with('error', 'العضو موجود مسبقاً في النادي');
+        }
+        else{
+            UserMembership::create([
+                'user_id' => $request->user_id,
+                'package_id' => $request->package_id,
+                'plan_id' => $request->plan_id,
+                'start_date' => $request->start_date,
+                'end_date' => $endDate,
+            ]);
+        }
+
+
 
         return redirect()->route('admin.memberships.index')->with('success', 'تم إنشاء العضوية بنجاح!');
     }
@@ -69,7 +105,7 @@ class UserMembershipController extends Controller
     // عرض صفحة تعديل العضوية
     public function edit(UserMembership $membership)
     {
-        return view('memberships.edit', compact('membership'));
+        return view('admin.memberships.edit', compact('membership'));
     }
 
     // تحديث بيانات العضوية
@@ -83,7 +119,7 @@ class UserMembershipController extends Controller
 
         $membership->update($validated);
 
-        return redirect()->route('memberships.index')->with('success', 'تم تحديث العضوية بنجاح!');
+        return redirect()->route('admin.memberships.index')->with('success', 'تم تحديث العضوية بنجاح!');
     }
 
     // حذف العضوية
@@ -91,7 +127,7 @@ class UserMembershipController extends Controller
     {
         $membership->delete();
 
-        return redirect()->route('memberships.index')->with('success', 'تم حذف العضوية بنجاح!');
+        return redirect()->route('admin.memberships.index')->with('success', 'تم حذف العضوية بنجاح!');
     }
 
     public function exportExcel()

@@ -94,6 +94,16 @@
                     <i class="bi bi-people-fill me-2"></i> إدارة العضويات
                 </h1>
 
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <div class="d-flex align-items-center gap-2">
                     @can('export-memberships')
                         <div class="dropdown">
@@ -187,18 +197,18 @@
                         <table id="membershipsTable" class="table table-hover">
                             <thead class="table-light">
                             <tr>
-                                <th>#</th>
                                 <th>اسم المستخدم</th>
+                                <th>الخطة</th>
                                 <th>الباقة</th>
+                                <th>تاريخ بدء العضوية</th>
+                                <th>تاريخ انتهاء العضوية</th>
                                 <th>الحالة</th>
-                                <th>تاريخ الإنشاء</th>
                                 <th>الإجراءات</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($memberships as $membership)
                                 <tr>
-                                    <td>{{ $membership->id }}</td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $membership->user?->profile_photo_url ?? asset('images/default-avatar.png') }}"
@@ -208,17 +218,18 @@
                                                  alt="صورة العضو">
                                             <div>
                                                 <div class="fw-bold">{{ $membership->user?->name }}</div>
-                                                <div class="small text-muted">{{ $membership->user?->email }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ $membership->package?->name }}</td>
+                                    <td>{{ $membership->plan?->name}}</td>
+                                    <td>{{ $membership->package?->name}}</td>
+                                    <td>{{\Carbon\Carbon::parse($membership->start_date)->format('Y-m-d')}}</td>
+                                    <td>{{\Carbon\Carbon::parse($membership->end_date)->format('Y-m-d')}}</td>
                                     <td>
                                         <span class="badge badge-status {{ $membership->status === 'active' ? 'bg-success' : 'bg-danger' }}">
                                             {{ $membership->status === 'active' ? 'نشط' : 'منتهي' }}
                                         </span>
                                     </td>
-                                    <td>{{ $membership->created_at->format('Y-m-d') }}</td>
                                     <td>
                                         <div class="action-buttons d-flex gap-1">
                                             @can('view-membership-details')

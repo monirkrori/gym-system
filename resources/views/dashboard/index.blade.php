@@ -167,30 +167,31 @@
             @endcan
 
         <!-- الإجراءات السريعة -->
-            @canany(['create-member', 'create-session', 'create-trainer', 'view-reports'])
+            @canany(['create-member', 'create-session', 'create-trainer', 'create-plans'])
                 <div class="bg-white shadow-lg rounded-2xl p-6">
                     <h4 class="font-semibold text-xl text-gray-800 mb-6">إجراءات سريعة</h4>
                     <div class="space-y-4">
                         @can('create-member')
-                            <a href="#" class="block w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
+                            <a href="{{route('admin.memberships.create')}}" class="block w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
                                 <i class="bi bi-person-plus ml-2"></i>إضافة عضو جديد
                             </a>
                         @endcan
                         @can('create-session')
-                            <a href="#" class="block w-full bg-green-500 hover:bg-green-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
+                            <a href="{{route('admin.sessions.create')}}" class="block w-full bg-green-500 hover:bg-green-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
                                 <i class="bi bi-calendar-plus ml-2"></i>إنشاء جلسة تدريبية
                             </a>
                         @endcan
                         @can('create-trainer')
-                            <a href="#" class="block w-full bg-purple-500 hover:bg-purple-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
+                            <a href="{{route('admin.trainers.create')}}" class="block w-full bg-purple-500 hover:bg-purple-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
                                 <i class="bi bi-person-workspace ml-2"></i>إضافة مدرب جديد
                             </a>
                         @endcan
-                        @can('view-reports')
-                            <a href="#" class="block w-full bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
-                                <i class="bi bi-file-earmark-text ml-2"></i>إنشاء تقرير
-                            </a>
-                        @endcan
+                       @can('create-plans')
+                           <a href="{{route('admin.membership-plans.create')}}" class="block w-full bg-gradient-to-br from-yellow-500 to-yellow-700 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
+                               <i class="bi bi-person-check ml-2"></i>إضافة خطة عضوية
+                           </a>
+                       @endcan
+
                     </div>
                 </div>
             @endcanany

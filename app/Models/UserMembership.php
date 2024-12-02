@@ -21,7 +21,7 @@ class UserMembership extends Model
         return $this->belongsTo(MembershipPackage::class);
     }
 
-    public function plans()
+    public function plan()
     {
         return $this->belongsTo(MembershipPlan::class);
     }

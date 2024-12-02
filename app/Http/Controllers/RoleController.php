@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRoleRequest;
-use App\Http\Requests\UpdateRoleRequest;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\View\View;
+use App\Http\Requests\dashboard\StoreRoleRequest;
+use App\Http\Requests\dashboard\UpdateRoleRequest;
 use Illuminate\Http\RedirectResponse;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
 
 class RoleController extends Controller
 {
@@ -26,7 +27,7 @@ class RoleController extends Controller
     public function index(): View
     {
         return view('roles.index', [
-            'roles' => Role::orderBy('id','DESC')->paginate(3)
+            'roles' => Role::all()
         ]);
     }
 
@@ -51,7 +52,7 @@ class RoleController extends Controller
 
         $role->syncPermissions($permissions);
 
-        return redirect()->route('roles.index')
+        return redirect()->route('admin.roles.index')
             ->withSuccess('New role is added successfully.');
     }
 
@@ -119,7 +120,7 @@ class RoleController extends Controller
             abort(403, 'CAN NOT DELETE SELF ASSIGNED ROLE');
         }
         $role->delete();
-        return redirect()->route('roles.index')
+        return redirect()->route('admin.roles.index')
             ->withSuccess('Role is deleted successfully.');
     }
 }

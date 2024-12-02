@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UserMemberShipRequest extends FormRequest
 {
@@ -19,6 +18,7 @@ class UserMemberShipRequest extends FormRequest
     {
         return [
         'name' => ['required', 'string', 'max:255'],
+
     ];
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\dashboard\StoreUserRequest;
+use App\Http\Requests\dashboard\UpdateUserRequest;
 use App\Models\User;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -39,6 +39,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        $users = User::all();
         return view('users.create', [
             'roles' => Role::pluck('name')->all()
         ]);

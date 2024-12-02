@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
@@ -165,6 +165,19 @@ class DashboardController extends Controller
         // Generate a consistent index based on package name
         $index = abs(crc32($packageName)) % count($colors);
         return $colors[$index];
+    }
+
+    public function reports()
+    {
+        return view('dashboard.reports', [
+            'monthlyRevenue' => 15000, // Example: Monthly Revenue
+            'activeMembers' => 120, // Example: Active Members
+            'expiredMemberships' => 30, // Example: Expired Memberships
+            'trainersCount' => 10, // Example: Trainers Count
+            'revenueMonths' => ['يناير', 'فبراير', 'مارس', 'أبريل'], // Example: Months
+            'monthlyRevenueData' => [5000, 7000, 8000, 6000], // Example: Revenue Data
+            'members' => UserMembership::paginate(10), // Example: Members Pagination
+        ]);
     }
 }
 

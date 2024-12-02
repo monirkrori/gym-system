@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 8, 2);
-            $table->integer('duration_days');
+            $table->integer('duration_month');
             $table->text('description')->nullable();
             $table->enum('status',['active','expired'])->default('active');
             $table->timestamps();

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->dateTime('end_time');
             $table->integer('current_capacity')->default(0);
             $table->integer('max_capacity');
-            $table->enum('status', ['scheduled', 'ongoing', 'completed', 'cancelled'])->default('scheduled');
+            $table->enum('status', ['active', 'expired', 'scheduled',])->default('active');
             $table->timestamps();
         });
     }
