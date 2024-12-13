@@ -26,4 +26,9 @@ class TrainingSession extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

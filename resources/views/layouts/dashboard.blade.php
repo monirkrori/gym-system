@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 
     <!-- Custom CSS -->
     <style>
@@ -70,7 +72,7 @@
             <nav class="mt-2">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                             <i class="bi bi-speedometer2 me-2"></i>
                             لوحة التحكم
                         </a>
@@ -78,14 +80,14 @@
 
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href= '/admin/memberships' class="nav-link">
                                 <i class="bi bi-people me-2"></i>
                                 الأعضاء
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href='/admin/trainers' class="nav-link">
                                 <i class="bi bi-person-workspace me-2"></i>
                                 المدربين
                             </a>
@@ -164,7 +166,7 @@
                             <!-- User Menu -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                    <img src="{{ auth()->user()->profile->profile_photo ?? asset('images/default-avatar.png') }}"
+                                    <img src="#"
                                          class="rounded-circle me-2"
                                          alt="صورة المستخدم"
                                          width="32"
@@ -172,7 +174,7 @@
                                     {{ auth()->user()->name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                    <a class="dropdown-item" href="{{route('admin.profile.edit')}}">
                                         <i class="bi bi-person me-2"></i>
                                         الملف الشخصي
                                     </a>

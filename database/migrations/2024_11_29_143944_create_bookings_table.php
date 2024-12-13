@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->text('message');
-            $table->enum('type', ['membership', 'session', 'system'])->default('system');
-            $table->timestamp('read_at')->nullable();
-
-
+            $table->foreignId('session_id')->constrained('training_sessions')->onDelete('cascade');
+            $table->enum('status', ['booked', 'cancelled']);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('bookings');
     }
 };

@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\UserMembershipController;
+use App\Http\Controllers\Api\member\UserMembershipController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\TrainingSessionController;
+use App\Http\Controllers\Api\member\TrainingSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('sessions', [TrainingSessionController::class, 'listSessions'])->middleware('auth:sanctum');
+//member routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('sessions', [TrainingSessionController::class, 'listSessions']);
+    Route::post('training-sessions/book', [TrainingSessionController::class, 'bookSession']);
+    Route::post('training-sessions/cancel', [TrainingSessionController::class, 'cancelSession']);
+});
 Route::post('subscribe', [UserMembershipController::class, 'subscribeToMembership'])->middleware('auth:sanctum');
 

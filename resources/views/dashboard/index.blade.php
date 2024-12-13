@@ -109,7 +109,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">آخر النشاطات</h5>
-                        <a href="{{ route('activities.index') }}" class="btn btn-sm btn-primary">عرض الكل</a>
+                        <a href="{{ route('admin.activities.index') }}" class="btn btn-sm btn-primary">عرض الكل</a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

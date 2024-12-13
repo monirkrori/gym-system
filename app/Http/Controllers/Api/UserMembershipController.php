@@ -4,33 +4,34 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\UserMembership;
-use App\Models\MembershipPackage;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\SubscribeMembershipRequest;
+use Illuminate\Support\Facades\Validator;
 
 class UserMembershipController extends Controller
 {
-        // Subscribe to a membership package
-        public function subscribeToMembership(SubscribeMembershipRequest $request)
+
+        public function updateStatus(Request $request, $id)
+
         {
-            $user = Auth::user();
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:active,expired,cancelled',
+        ]);
 
-            // Find the selected package by ID
-            $membershipPackage = MembershipPackage::find($request->membership_package_id);
-
-            if (!$membershipPackage) {
-                return $this->errorResponse('Membership package not found.');
-            }
-
-            // Create or update user membership
-            $userMembership = UserMembership::updateOrCreate(
-                ['user_id' => $user->id, 'package_id' => $membershipPackage->id],
-                ['start_date' => now(), 'end_date' => now()->addDays($membershipPackage->duration_days), 'status' => 'active']
-            );
-
-            // Assuming subscription logic is handled here
-            return $this->succsessResponse($userMembership, 'Successfully subscribed to the membership.');
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
+        // Find the membership by ID
+        $membership = UserMembership::findOrFail($id);
+
+        if (!$membership) {
+            return response()->json(['message' => 'User membership not found'], 404);
+        }
+
+        // Update the status
+        $membership->status = $request->status;
+        $membership->save();
+
+        return response()->json(['message' => 'Membership status updated successfully', 'membership' => $membership], 200);
+    }
 }
