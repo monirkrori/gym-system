@@ -149,7 +149,7 @@
                                     </div>
                                     <div>
                                         <h6 class="card-subtitle mb-1 text-white-50">إجمالي العضويات</h6>
-                                        <h2 class="card-title mb-0">{{ $totalMembers }}</h2>
+                                        <h2 class="card-title mb-0">{{ $statistics['total'] }}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +165,7 @@
                                     </div>
                                     <div>
                                         <h6 class="card-subtitle mb-1 text-white-50">العضويات النشطة</h6>
-                                        <h2 class="card-title mb-0">{{ $activeMembers }}</h2>
+                                        <h2 class="card-title mb-0">{{ $statistics['active'] }}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@
                                     </div>
                                     <div>
                                         <h6 class="card-subtitle mb-1 text-white-50">العضويات المنتهية</h6>
-                                        <h2 class="card-title mb-0">{{ $expiredMembers }}</h2>
+                                        <h2 class="card-title mb-0">{{ $statistics['expired']}}</h2>
                                     </div>
                                 </div>
                             </div>

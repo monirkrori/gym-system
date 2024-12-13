@@ -18,7 +18,8 @@ return new class extends Migration
             $table->dateTime('check_out')->nullable();
             $table->enum('status', ['present', 'absent'])->default('present');
             $table->text('notes')->nullable();
-            $table->timestamps();
+
+                $table->timestamps();
         });
     }
 

@@ -24,11 +24,11 @@
                     <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg rounded-2xl p-6 flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold mb-2 opacity-80">الأعضاء النشطين</h3>
-                            <p class="text-4xl font-bold">{{ $activeMembers }}</p>
+                            <p class="text-4xl font-bold">{{ $membershipMetrics['activeMembers'] }}</p>
                             <div class="flex items-center mt-2 text-sm">
-                                <span class="{{ $newMembersPercentage > 0 ? 'text-green-200' : 'text-red-200' }}">
-                                    <i class="bi {{ $newMembersPercentage > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }} ml-1"></i>
-                                    {{ $newMembersPercentage }}%
+                                <span class="{{ $membershipMetrics['newMembersPercentage'] > 0 ? 'text-green-200' : 'text-red-200' }}">
+                                    <i class="bi {{ $membershipMetrics['newMembersPercentage'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }} ml-1"></i>
+                                    {{ $membershipMetrics['newMembersPercentage']}}%
                                 </span>
                                 <span class="mr-2 opacity-75">عن الشهر الماضي</span>
                             </div>
@@ -43,11 +43,11 @@
                     <div class="bg-gradient-to-br from-green-500 to-green-700 text-white shadow-lg rounded-2xl p-6 flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold mb-2 opacity-80">الإيرادات الشهرية</h3>
-                            <p class="text-4xl font-bold">{{ number_format($monthlyRevenue) }} ر.س</p>
+                            <p class="text-4xl font-bold">{{ number_format($revenueMetrics['monthlyRevenue']) }} ل.س</p>
                             <div class="flex items-center mt-2 text-sm">
-                                <span class="{{ $revenueGrowth > 0 ? 'text-green-200' : 'text-red-200' }}">
-                                    <i class="bi {{ $revenueGrowth > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }} ml-1"></i>
-                                    {{ $revenueGrowth }}%
+                                <span class="{{ $revenueMetrics['revenueGrowth'] > 0 ? 'text-green-200' : 'text-red-200' }}">
+                                    <i class="bi {{ $revenueMetrics['revenueGrowth'] > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }} ml-1"></i>
+                                    {{ $revenueMetrics['revenueGrowth'] }}%
                                 </span>
                                 <span class="mr-2 opacity-75">عن الشهر الماضي</span>
                             </div>
@@ -62,8 +62,8 @@
                     <div class="bg-gradient-to-br from-purple-500 to-purple-700 text-white shadow-lg rounded-2xl p-6 flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-semibold mb-2 opacity-80">الجلسات اليوم</h3>
-                            <p class="text-4xl font-bold">{{ $todaySessions }}</p>
-                            <p class="mt-2 text-sm opacity-75">{{ $activeTrainers }} مدرب متاح</p>
+                            <p class="text-4xl font-bold">{{ $sessionMetrics['todaySessions'] }}</p>
+                            <p class="mt-2 text-sm opacity-75">{{$sessionMetrics['activeTrainers']}} مدرب متاح</p>
                         </div>
                         <i class="bi bi-calendar-event text-6xl opacity-50"></i>
                     </div>
