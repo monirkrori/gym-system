@@ -15,4 +15,9 @@ class AttendanceLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function session()
+    {
+        return $this->belongsTo(TrainingSession::class, 'session_id');
+    }
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('session_id')->constrained('training_sessions')->onDelete('cascade');
             $table->enum('status', ['booked', 'cancelled']);
+            $table->timestamp('booked_at');
             $table->timestamps();
         });
     }

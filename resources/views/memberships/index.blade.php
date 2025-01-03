@@ -5,230 +5,281 @@
 @push('styles')
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <style>
+        /* Enhanced Visual Styling */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --secondary-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --danger-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        }
+
+        body {
+            background-color: #f4f7fa;
+        }
+
         .stats-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
+            transition: all 0.4s ease;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            background-size: 200% 200%;
+            background-position: 0 0;
+            animation: gradientShift 10s ease infinite;
         }
+
+        @keyframes gradientShift {
+            0% { background-position: 0 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+
         .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
         }
+
+        .stats-card .card-body {
+            position: relative;
+            z-index: 2;
+        }
+
         .icon-box {
-            width: 48px;
-            height: 48px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
-        }
-        .dataTables_wrapper .dataTables_length,
-        .dataTables_wrapper .dataTables_filter {
-            margin-bottom: 1rem;
-        }
-        .badge-status {
-            padding: 0.5em 1em;
-            border-radius: 30px;
-        }
-        .action-buttons .btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
+            border-radius: 15px;
+            background-color: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
         }
 
-        /* تعديل القائمة المنسدلة */
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        .table-hover tbody tr:hover {
+            background-color: rgba(0,123,255,0.05);
+            transition: background-color 0.3s ease;
+        }
+
+        .action-buttons .btn {
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+
+        .action-buttons .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            min-width: 160px;
-            z-index: 1000;
-        }
-
-        .dropdown:hover .dropdown-menu {
-            display: block;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .dropdown-item {
-            padding: 8px 16px;
-            color: #333;
-            text-decoration: none;
-            display: block;
+            transition: all 0.3s ease;
         }
 
         .dropdown-item:hover {
-            background-color: #f1f1f1;
+            background-color: #f4f4f4;
+            transform: translateX(5px);
         }
     </style>
 @endpush
 
 @section('content')
     <div class="container-fluid">
-        <!-- Header Section -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0 text-gray-800">إدارة العضويات</h1>
+        <!-- Header Section with Permissions Check -->
+        @can('view-member')
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="bi bi-people-fill me-2"></i> إدارة العضويات
+                </h1>
 
-            <!-- زر التصدير مع القائمة المنسدلة -->
-            <div class="dropdown">
-                <button class="btn btn-secondary">
-                    <i class="bi bi-file-earmark-earmark me-2"></i> تصدير
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" href="{{ route('admin.memberships.exports-excel') }}">
-                            <i class="bi bi-file-earmark-excel me-2 text-success"></i>
-                            تصدير Excel
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <div class="d-flex align-items-center gap-2">
+                    @can('export-memberships')
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle">
+                                <i class="bi bi-download me-2"></i> تصدير
+                            </button>
+                            <ul class="dropdown-menu">
+                                @can('export-memberships-excel')
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.memberships.exports-excel') }}">
+                                            <i class="bi bi-file-earmark-excel me-2 text-success"></i> تصدير Excel
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('export-memberships-pdf')
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.memberships.export.pdf') }}">
+                                            <i class="bi bi-file-earmark-pdf me-2 text-danger"></i> تصدير PDF
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    @endcan
+
+                    @can('create-membership')
+                        <a href="{{ route('admin.memberships.create') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> إضافة عضوية
                         </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('admin.memberships.export.pdf') }}">
-                            <i class="bi bi-file-earmark-pdf me-2 text-danger"></i>
-                            تصدير PDF
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="d-flex gap-2">
-                <a href="{{ route('admin.memberships.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-lg me-1"></i> إضافة عضوية
-                </a>
-            </div>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="row g-4 mb-4">
-            <div class="col-12 col-md-4">
-                <div class="card stats-card border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
-                                <i class="bi bi-people fs-4"></i>
-                            </div>
-                            <div>
-                                <h6 class="card-subtitle mb-1 text-muted">إجمالي العضويات</h6>
-                                <h2 class="card-title mb-0">{{ $totalMembers }}</h2>
-                            </div>
-                        </div>
-                    </div>
+                    @endcan
                 </div>
             </div>
 
-            <div class="col-12 col-md-4">
-                <div class="card stats-card border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box bg-success bg-opacity-10 text-success me-3">
-                                <i class="bi bi-check-circle fs-4"></i>
-                            </div>
-                            <div>
-                                <h6 class="card-subtitle mb-1 text-muted">العضويات النشطة</h6>
-                                <h2 class="card-title mb-0">{{ $activeMembers }}</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-4">
-                <div class="card stats-card border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box bg-danger bg-opacity-10 text-danger me-3">
-                                <i class="bi bi-x-circle fs-4"></i>
-                            </div>
-                            <div>
-                                <h6 class="card-subtitle mb-1 text-muted">العضويات المنتهية</h6>
-                                <h2 class="card-title mb-0">{{ $expiredMembers }}</h2>
+            <!-- Stats Cards with Gradient Backgrounds -->
+            <div class="row g-4 mb-4">
+                @can('view-membership-statistics')
+                    <div class="col-12 col-md-4">
+                        <div class="card stats-card border-0 shadow-sm" style="background-image: var(--primary-gradient);">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box me-3">
+                                        <i class="bi bi-people fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-white-50">إجمالي العضويات</h6>
+                                        <h2 class="card-title mb-0">{{ $totalMembers }}</h2>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Main Content Card -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="membershipsTable" class="table table-hover">
-                        <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>اسم المستخدم</th>
-                            <th>الباقة</th>
-                            <th>الحالة</th>
-                            <th>تاريخ الإنشاء</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($memberships as $membership)
+                    <div class="col-12 col-md-4">
+                        <div class="card stats-card border-0 shadow-sm" style="background-image: var(--success-gradient);">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box me-3">
+                                        <i class="bi bi-check-circle fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-white-50">العضويات النشطة</h6>
+                                        <h2 class="card-title mb-0">{{ $activeMembers }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="card stats-card border-0 shadow-sm" style="background-image: var(--danger-gradient);">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box me-3">
+                                        <i class="bi bi-x-circle fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-white-50">العضويات المنتهية</h6>
+                                        <h2 class="card-title mb-0">{{ $expiredMembers }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endcan
+            </div>
+
+            <!-- Main Content Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="membershipsTable" class="table table-hover">
+                            <thead class="table-light">
                             <tr>
-                                <td>{{ $membership->id }}</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{{ $membership->user?->profile_photo_url ?? asset('images/default-avatar.png') }}"
-                                             class="rounded-circle me-2"
-                                             width="32"
-                                             height="32"
-                                             alt="صورة العضو">
-                                        <div>
-                                            <div class="fw-bold">{{ $membership->user?->name }}</div>
-                                            <div class="small text-muted">{{ $membership->user?->email }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{{ $membership->package?->name }}</td>
-                                <td>
-                                    <span class="badge badge-status {{ $membership->status === 'active' ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $membership->status === 'active' ? 'نشط' : 'منتهي' }}
-                                    </span>
-                                </td>
-                                <td>{{ $membership->created_at->format('Y-m-d') }}</td>
-                                <td>
-                                    <div class="action-buttons d-flex gap-1">
-                                        <a href="{{ route('admin.memberships.show', $membership->id) }}"
-                                           class="btn btn-sm btn-info"
-                                           title="عرض">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.memberships.edit', $membership->id) }}"
-                                           class="btn btn-sm btn-warning"
-                                           title="تعديل">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('admin.memberships.destroy', $membership->id) }}"
-                                              method="POST"
-                                              class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-danger"
-                                                    title="حذف"
-                                                    onclick="return confirm('هل أنت متأكد من حذف هذه العضوية؟')">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
+                                <th>اسم المستخدم</th>
+                                <th>الخطة</th>
+                                <th>الباقة</th>
+                                <th>تاريخ بدء العضوية</th>
+                                <th>تاريخ انتهاء العضوية</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach ($memberships as $membership)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ $membership->user?->profile_photo_url ?? asset('images/default-avatar.png') }}"
+                                                 class="rounded-circle me-2"
+                                                 width="40"
+                                                 height="40"
+                                                 alt="صورة العضو">
+                                            <div>
+                                                <div class="fw-bold">{{ $membership->user?->name }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $membership->plan?->name}}</td>
+                                    <td>{{ $membership->package?->name}}</td>
+                                    <td>{{\Carbon\Carbon::parse($membership->start_date)->format('Y-m-d')}}</td>
+                                    <td>{{\Carbon\Carbon::parse($membership->end_date)->format('Y-m-d')}}</td>
+                                    <td>
+                                        <span class="badge badge-status {{ $membership->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $membership->status === 'active' ? 'نشط' : 'منتهي' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons d-flex gap-1">
+                                            @can('view-membership-details')
+                                                <a href="{{ route('admin.memberships.show', $membership->id) }}"
+                                                   class="btn btn-sm btn-info"
+                                                   title="عرض">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            @endcan
 
-                    <div class="mt-4">
-                        {{ $memberships->links() }}
+                                            @can('edit-membership')
+                                                <a href="{{ route('admin.memberships.edit', $membership->id) }}"
+                                                   class="btn btn-sm btn-warning"
+                                                   title="تعديل">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            @endcan
+
+                                            @can('delete-membership')
+                                                <form action="{{ route('admin.memberships.destroy', $membership->id) }}"
+                                                      method="POST"
+                                                      class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-danger"
+                                                            title="حذف"
+                                                            onclick="return confirm('هل أنت متأكد من حذف هذه العضوية؟')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+
+                        <div class="mt-4">
+                            {{ $memberships->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-shield-lock me-2"></i> ليس لديك الصلاحية للوصول إلى هذه الصفحة
+            </div>
+        @endcan
     </div>
 @endsection
 
@@ -240,7 +291,12 @@
             $('#membershipsTable').DataTable({
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Arabic.json'
-                }
+                },
+                pageLength: 10,
+                responsive: true,
+                columnDefs: [
+                    { orderable: false, targets: [-1] } // Disable sorting for action column
+                ]
             });
         });
     </script>

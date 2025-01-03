@@ -19,4 +19,9 @@ public function sessions()
 {
 return $this->hasMany(TrainingSession::class);
 }
+
+// public function ratings()
+// {
+//     return $this->morphMany(Rating::class, 'rateable');
+// }
 }

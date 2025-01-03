@@ -3,13 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable,HasRoles;
 
@@ -18,7 +19,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'email', 'password', 'phone_number'];
+    protected $fillable = ['name', 'email', 'password', 'phone_number','gender'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -39,15 +40,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function profile()
+
+
+    public function membership()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(UserMembership::class);
     }
 
-
-    public function memberships()
+    public function trainer()
     {
-        return $this->hasMany(UserMembership::class);
+        return $this->hasOne(Trainer::class);
     }
 
     public function attendanceLogs()
@@ -64,9 +66,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
-
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function mealPlan()
+    {
+        return $this->belongsTo(MealPlan::class);
     }
 }
