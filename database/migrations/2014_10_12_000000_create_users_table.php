@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,7 +16,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone_number')->nullable();
-            $table->enum('role',['admin' , 'trainer' , 'member'])->default('member');
             $table->string('profile_photo')->nullable();
             $table->enum('gender', ['male', 'female']);
             $table->string('password');

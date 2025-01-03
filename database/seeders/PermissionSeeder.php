@@ -18,10 +18,12 @@ class PermissionSeeder extends Seeder
             'create-role',
             'edit-role',
             'delete-role',
+
             'view-trainer',
             'create-trainer',
             'edit-trainer',
             'delete-trainer',
+
             'view-sessions',
             'create-sessions',
             'update-sessions',

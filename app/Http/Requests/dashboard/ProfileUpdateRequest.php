@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\dashboard;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -18,6 +18,7 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'gender' => 'required|in:male,female'
         ];
     }
 }

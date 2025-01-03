@@ -9,9 +9,10 @@ use Illuminate\Notifications\Notification;
 
 class AdminNotification extends Notification
 {
-   public function via($notifiable){
-       return ['database'];
-   }
+    public function via($notifiable)
+    {
+        return ['database'];
+    }
 
     public function toDatabase($notifiable)
     {

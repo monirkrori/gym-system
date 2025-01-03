@@ -1,59 +1,39 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
+@section('title', 'إضافة دور جديد')
 
 @section('content')
+    <div class="container-fluid px-4 py-6 bg-gray-50 min-h-screen">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">إضافة دور جديد</h1>
+            <p class="text-gray-600">قم بإضافة دور جديد مع تحديد الصلاحيات الخاصة به</p>
+        </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="float-start">
-                        Add New Role
-                    </div>
-                    <div class="float-end">
-                        <a href="{{ route('roles.index') }}" class="btn btn-primary btn-sm">&larr; Back</a>
-                    </div>
+        <div class="bg-white shadow-lg rounded-2xl p-6">
+            <form action="{{ route('admin.roles.store') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-semibold text-gray-600">الاسم</label>
+                    <input type="text" id="name" name="name" class="mt-2 block w-full p-2 rounded-md border border-gray-300" required>
                 </div>
-                <div class="card-body">
-                    <form action="{{ route('roles.store') }}" method="post">
-                        @csrf
 
-                        <div class="mb-3 row">
-                            <label for="name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}">
-                                @if ($errors->has('name'))
-                                    <span class="text-danger">{{ $errors->first('name') }}</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="mb-3 row">
-                            <label for="permissions" class="col-md-4 col-form-label text-md-end text-start">Permissions</label>
-                            <div class="col-md-6">
-                                <select class="form-select @error('permissions') is-invalid @enderror" multiple aria-label="Permissions" id="permissions" name="permissions[]" style="height: 210px;">
-                                    @forelse ($permissions as $permission)
-                                        <option value="{{ $permission->id }}" {{ in_array($permission->id, old('permissions') ?? []) ? 'selected' : '' }}>
-                                            {{ $permission->name }}
-                                        </option>
-                                    @empty
-
-                                    @endforelse
-                                </select>
-                                @if ($errors->has('permissions'))
-                                    <span class="text-danger">{{ $errors->first('permissions') }}</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="mb-3 row">
-                            <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Add Role">
-                        </div>
-
-                    </form>
+                <div class="mb-4">
+                    <label for="description" class="block text-sm font-semibold text-gray-600">الوصف</label>
+                    <textarea id="description" name="description" rows="4" class="mt-2 block w-full p-2 rounded-md border border-gray-300"></textarea>
                 </div>
-            </div>
+
+                <div class="mb-4">
+                    <label for="permissions" class="block text-sm font-semibold text-gray-600">الصلاحيات</label>
+                    <select id="permissions" name="permissions[]" multiple class="mt-2 block w-full p-2 rounded-md border border-gray-300">
+                        @foreach($permissions as $permission)
+                            <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">حفظ</button>
+                </div>
+            </form>
         </div>
     </div>
-
 @endsection

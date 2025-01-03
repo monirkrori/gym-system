@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\dashboard\StoreUserRequest;
+use App\Http\Requests\dashboard\UpdateUserRequest;
 use App\Models\User;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -18,9 +18,9 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index','show']]);
-        $this->middleware('permission:create-user', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-user', ['only' => ['edit','update']]);
+        $this->middleware('permission:create-user|edit-user|delete-user', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-user', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-user', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-user', ['only' => ['destroy']]);
     }
 
@@ -39,6 +39,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        $users = User::all();
         return view('users.create', [
             'roles' => Role::pluck('name')->all()
         ]);
@@ -75,8 +76,8 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         // Check Only Super Admin can update his own Profile
-        if ($user->hasRole('Super Admin')){
-            if($user->id != auth()->user()->id){
+        if ($user->hasRole('Super Admin')) {
+            if ($user->id != auth()->user()->id) {
                 abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
             }
         }
@@ -95,9 +96,9 @@ class UserController extends Controller
     {
         $input = $request->all();
 
-        if(!empty($request->password)){
+        if (!empty($request->password)) {
             $input['password'] = Hash::make($request->password);
-        }else{
+        } else {
             $input = $request->except('password');
         }
 
@@ -115,8 +116,7 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         // About if user is Super Admin or User ID belongs to Auth User
-        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id)
-        {
+        if ($user->hasRole('Super Admin') || $user->id == auth()->user()->id) {
             abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS');
         }
 

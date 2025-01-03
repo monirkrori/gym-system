@@ -9,7 +9,7 @@ class UserMembership extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'package_id', 'start_date', 'end_date', 'remaining_sessions', 'status','plan_id'];
+    protected $fillable = ['user_id', 'package_id', 'start_date', 'end_date', 'remaining_sessions', 'status', 'plan_id'];
 
     public function user()
     {
@@ -21,7 +21,7 @@ class UserMembership extends Model
         return $this->belongsTo(MembershipPackage::class);
     }
 
-    public function plans()
+    public function plan()
     {
         return $this->belongsTo(MembershipPlan::class);
     }

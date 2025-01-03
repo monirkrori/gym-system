@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trainer extends Model
 {
-use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-protected $fillable = ['user_id', 'specialization', 'experience_years', 'rating_avg', 'status'];
+    protected $fillable = ['user_id', 'specialization', 'experience_years', 'rating_avg', 'status'];
 
-public function user()
-{
-return $this->belongsTo(User::class);
-}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-public function sessions()
-{
-return $this->hasMany(TrainingSession::class);
-}
+    public function sessions()
+    {
+        return $this->hasMany(TrainingSession::class);
+    }
 }
