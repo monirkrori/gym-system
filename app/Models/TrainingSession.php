@@ -26,4 +26,9 @@ class TrainingSession extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+
+    public function attendees()
+    {
+        return $this->hasMany(AttendanceLog::class, 'session_id');
+    }
 }

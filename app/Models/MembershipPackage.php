@@ -9,7 +9,7 @@ class MembershipPackage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['plan_id', 'name', 'price', 'duration_days', 'max_training_sessions', 'difficulty_level', 'description', 'is_active', 'meal_plan_id'];
+    protected $fillable = ['plan_id', 'name', 'price', 'duration_days', 'max_training_sessions', 'difficulty_level', 'description', 'status', 'meal_plan_id'];
 
     public function plan()
     {

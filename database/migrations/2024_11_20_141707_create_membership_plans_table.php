@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,12 +14,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 8, 2);
-            $table->integer('duration_days');
+            $table->integer('duration_month');
             $table->text('description')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['active', 'expired'])->default('active');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
