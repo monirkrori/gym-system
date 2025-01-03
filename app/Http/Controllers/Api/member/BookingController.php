@@ -114,9 +114,7 @@ class BookingController extends Controller
 //--------------------------------------------------------------------------------//
 
     //get booking history for a user
-
-
-
+    
     public function getBookingHistory(Request $request)
     {
         $user = auth()->user();

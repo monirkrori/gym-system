@@ -17,7 +17,7 @@ class TrainingSessionController extends Controller
     {
         $user = Auth::user();
 
-    // Retrieve sessions available for the user based on their membership level
+    // Retrieve sessions available for the user 
     $sessions = TrainingSession::where('status', 'scheduled')
         ->whereColumn('current_capacity', '<', 'max_capacity')
         ->where('start_time', '>', now())  // Only future sessions
@@ -30,11 +30,11 @@ class TrainingSessionController extends Controller
     public function show($id)
     {
         // Find the session by ID
-        $session = TrainingSession::find($id);  // Using find() instead of findOrFail to allow for custom error handling
+        $session = TrainingSession::find($id);
 
         // Check if the session was found
         if (!$session) {
-            return $this->errorResponse('Training session not found', 404);  // Using errorResponse from the trait
+            return $this->errorResponse('Training session not found', 404);
         }
 
         // Return the status of the found session
