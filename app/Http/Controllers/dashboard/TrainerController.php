@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\dashboard;
 
-use function view;
-use function abort;
-use App\Models\User;
-use App\Models\Trainer;
-use Illuminate\Http\Request;
-use App\Models\UserMembership;
 use App\Exports\TrainersExport;
 use App\Http\Controllers\Controller;
+use App\Models\Trainer;
+use App\Models\User;
+use App\Models\UserMembership;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use function abort;
+use function view;
 
 class TrainerController extends Controller
 {
@@ -18,7 +19,7 @@ class TrainerController extends Controller
     {
         $this->authorize('view-trainer');
 
-        $trainers=Trainer::with('user')->paginate(10);
+        $trainers = Trainer::with('user')->paginate(10);
         $totalTrainers = Trainer::count(); // العدد الكلي للمدربين
         $activeTrainer = Trainer::where('status', 'available')->count();
 
@@ -26,7 +27,7 @@ class TrainerController extends Controller
     }
     public function show(Trainer $trainer)
     {
-        $this->authorize('view-trainer'); 
+        $this->authorize('view-trainer');
 
         return view('trainers.show', compact('trainer'));
     }
@@ -38,7 +39,7 @@ class TrainerController extends Controller
     {
         $this->authorize('create-trainer');
         $users = User::all();
-        return view('trainers.create',compact('users'));
+        return view('trainers.create', compact('users'));
     }
 
     /**
@@ -61,24 +62,21 @@ class TrainerController extends Controller
         $membership = UserMembership::where('user_id', $user->id)->first();
         $trainer = Trainer::where('user_id', $user->id)->first();
 
-        if ($membership ){
+        if ($membership) {
             $membership->delete();
             Trainer::create($request->all());
             $user->removeRole('member');
             $user->assignRole('trainer');
-        }
-
-        elseif($trainer){
+        } elseif ($trainer) {
             return redirect()->back()->with('error', 'المدرب موجود مسبقاً في النادي');
-        }
-        else{
+        } else {
             Trainer::create($request->all());
         }
 
 
-
         return redirect()->route('admin.trainers.index')->with('success', 'تم إضافة المدرب بنجاح');
     }
+
     /**
      * Show the form for editing the specified trainer.
      */
@@ -87,7 +85,7 @@ class TrainerController extends Controller
         $this->authorize('edit-trainer');
         $users = User::all();
 
-        return view('trainers.edit', compact('trainer','users'));
+        return view('trainers.edit', compact('trainer', 'users'));
     }
 
     /**
@@ -98,10 +96,10 @@ class TrainerController extends Controller
         $this->authorize('edit-trainer'); // صلاحية تعديل مدرب
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:trainers,email,' . $trainer->id,
-            'specialty' => 'required|string|max:255',
-            'status' => 'required|in:active,inactive',
+            'specialization' => 'required|string|max:255',
+            'experience_years' => 'required|integer|min:0',
+            'status' => 'required|in:available,unavailable',
+            'rating_avg' => 'nullable|numeric|min:0|max:5',
         ]);
 
         $trainer->update($validated);
@@ -128,7 +126,7 @@ class TrainerController extends Controller
                 return $this->exportAsPdf();
             case 'excel':
                 return $this->exportAsExcel();
-                default:
+            default:
                 abort(404, 'نوع التصدير غير مدعوم');
         }
     }

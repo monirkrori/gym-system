@@ -5,7 +5,6 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\dashboard\StoreEquipmentRequest;
 use App\Http\Requests\dashboard\UpdateEquipmentRequest;
-use Illuminate\Http\Request;
 use App\Models\Equipment;
 
 class EquipmentController extends Controller
@@ -38,7 +37,7 @@ class EquipmentController extends Controller
 
     public function show(Equipment $equipment)
     {
-        
+
         return view('equipments.show', compact('equipment'));
     }
 

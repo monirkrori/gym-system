@@ -1,4 +1,3 @@
-
 @extends('layouts.dashboard')
 
 @section('title', 'تعديل الملف الشخصي')

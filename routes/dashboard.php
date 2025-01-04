@@ -1,20 +1,19 @@
 <?php
 
-use App\Models\MembershipPackage;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\dashboard\ProfileController;
-use App\Http\Controllers\dashboard\TrainerController;
-use App\Http\Controllers\dashboard\ActivityController;
-use App\Http\Controllers\dashboard\MealPlanController;
 use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\dashboard\EquipmentController;
-use App\Http\Controllers\dashboard\MembershipPlanController;
-
-use App\Http\Controllers\dashboard\UserMembershipController;
-use App\Http\Controllers\dashboard\TrainingSessionController;
+use App\Http\Controllers\dashboard\MealPlanController;
 use App\Http\Controllers\dashboard\MembershipPackageController;
+use App\Http\Controllers\dashboard\MembershipPlanController;
+use App\Http\Controllers\dashboard\ProfileController;
+use App\Http\Controllers\dashboard\TrainerController;
+use App\Http\Controllers\dashboard\TrainingSessionController;
+use App\Http\Controllers\dashboard\UserMembershipController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+
+use App\Models\MembershipPackage;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +25,8 @@ use App\Http\Controllers\dashboard\MembershipPackageController;
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth')->group(function () {
         //dashboard
-        Route::get('/dashboard',[DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
-        Route::get('dashboard/reports' , [DashboardController::class,'reports']);
+        Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+        Route::get('dashboard/reports', [DashboardController::class, 'reports']);
 
         //..........................................Profile Route.........................................................
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,12 +35,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         //..........................................Activity Route.........................................................
         Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
         //..........................................Members Route.........................................................
-        Route::resource('memberships',UserMembershipController::class);
+        Route::resource('memberships', UserMembershipController::class);
         Route::get('/memberships.xlsx', [UserMembershipController::class, 'exportExcel'])->name('memberships.exports-excel');
         Route::get('exports/memberships-pdf', [UserMembershipController::class, 'exportPdf'])->name('memberships.export.pdf');
         //..........................................Trainers Route.........................................................
-        Route::resource('trainers',TrainerController::class);
-        Route::get('trainers/exports/{type}' , [TrainerController::class,'export'])->name('trainers.export');
+        Route::resource('trainers', TrainerController::class);
+        Route::get('trainers/exports/{type}', [TrainerController::class, 'export'])->name('trainers.export');
         //..........................................Equipment Route.........................................................
         Route::resource('equipments', EquipmentController::class);
         //..........................................tranaing sessions Route.........................................................
@@ -54,7 +53,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('meal-plans', MealPlanController::class);
 
 
-
         Route::resources([
             'roles' => RoleController::class,
             'users' => UserController::class,
@@ -63,3 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     });
 });
+
+
+
+

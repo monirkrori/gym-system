@@ -17,7 +17,6 @@ class StoreEquipmentRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:available,maintenance',
-            'type'=> 'nullable|string,'
         ];
     }
 

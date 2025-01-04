@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\dashboard;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\dashboard\TrainingSessionRequest;
 use App\Models\MembershipPackage;
@@ -26,11 +27,16 @@ class TrainingSessionController extends Controller
         ]);
     }
 
+    public function show(TrainingSession $session)
+    {
+
+        return view('sessions.show', compact('session'));
+    }
     public function create()
     {
-        $trainers= Trainer::all();
+        $trainers = Trainer::all();
         $packages = MembershipPackage::all();
-        return view('sessions.create',compact('packages','trainers'));
+        return view('sessions.create', compact('packages', 'trainers'));
     }
 
     public function store(TrainingSessionRequest $request)
@@ -44,9 +50,9 @@ class TrainingSessionController extends Controller
     public function edit(TrainingSession $session)
     {
 
-        $trainers= Trainer::all();
+        $trainers = Trainer::all();
         $packages = MembershipPackage::all();
-        return view('sessions.edit', compact('session','packages','trainers'));
+        return view('sessions.edit', compact('session', 'packages', 'trainers'));
     }
 
     public function update(TrainingSessionRequest $request, TrainingSession $session)

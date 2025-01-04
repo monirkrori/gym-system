@@ -6,19 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UserMemberShipRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
+
 
     public function rules(): array
     {
         return [
-        'name' => ['required', 'string', 'max:255'],
-
-    ];
+            'user_id' => 'required|exists:users,id',
+            'plan_id' => 'required|exists:membership_plans,id',
+            'package_id' => 'nullable|exists:membership_packages,id',
+            'start_date' => 'required|date',
+            'status' => 'required|in:active,expired,cancelled',
+        ];
     }
+
 }

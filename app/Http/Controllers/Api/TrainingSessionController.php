@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\TrainingSession;
 use App\Http\Controllers\Controller;
+use App\Models\TrainingSession;
+use Illuminate\Http\Request;
 
 class TrainingSessionController extends Controller
 {
-
-    public function show($id)
+    public function show(TrainingSession $trainingSession)
     {
-        // Find the session by ID
-        $session = TrainingSession::findOrFail($id);
-
-        if (!$session) {
-            return response()->json(['message' => 'Training session not found'], 404);
-        }
-
-        return response()->json(['status' => $session->status]);
+        return response()->json(['status' => $trainingSession->status]);
     }
 }

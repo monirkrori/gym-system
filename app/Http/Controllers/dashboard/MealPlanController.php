@@ -29,6 +29,7 @@ class MealPlanController extends Controller
         MealPlan::create($request->validated());
         return redirect()->route('admin.meal-plans.index')->with('success', 'Meal Plan created successfully.');
     }
+
     public function show(MealPlan $mealPlan)
     {
         return view('meal-plans.show', compact('mealPlan'));

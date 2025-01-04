@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notification;
 class LoginNotification extends Notification
 {
     use Queueable;
+
     public $message;
     public $subject;
     public $fromEmail;
@@ -17,7 +18,7 @@ class LoginNotification extends Notification
 
     public function __construct()
     {
-        $this-> message = "you just logged in";
+        $this->message = "you just logged in";
         $this->subject = "your logging in!";
         $this->fromEmail = "monirkafori363@gmail.com";
         $this->mailer = "smtp";
@@ -39,7 +40,7 @@ class LoginNotification extends Notification
         return (new MailMessage)
             ->mailer('smtp')
             ->subject($this->subject)
-            ->greeting('Hello',$notifiable->name)
+            ->greeting('Hello', $notifiable->name)
             ->line($this->message);
 
     }

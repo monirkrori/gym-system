@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class TrainingSession extends Model
 {
     use HasFactory;
@@ -16,6 +16,9 @@ class TrainingSession extends Model
         'start_time', 'end_time', 'current_capacity', 'max_capacity',
         'allowed_membership_levels', 'status'
     ];
+
+
+    protected $dates = ['start_time','end_time'];
 
     public function package()
     {

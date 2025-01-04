@@ -1,4 +1,3 @@
-
 @extends('layouts.auth')
 
 @section('title', 'التحقق من البريد الإلكتروني')

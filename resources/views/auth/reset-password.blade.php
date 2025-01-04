@@ -1,4 +1,3 @@
-
 @extends('layouts.auth')
 
 @section('title', 'إعادة تعيين كلمة المرور')
