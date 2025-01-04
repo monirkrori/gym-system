@@ -60,6 +60,7 @@ class UserMembershipController extends Controller
 
 
         $plan = MembershipPlan::find($request->plan_id);
+        $package = MembershipPackage::find($request->package_id);
         $endDate = Carbon::parse($request->start_date)->addMonths($plan->duration_month);
         $user = User::find($request->user_id);
 
@@ -73,6 +74,7 @@ class UserMembershipController extends Controller
                 'plan_id' => $request->plan_id,
                 'start_date' => $request->start_date,
                 'end_date' => $endDate,
+                'remaining_sessions' => $package->max_training_sessions,
             ]);
 
             $user->removeRole('trainer');
@@ -89,7 +91,7 @@ class UserMembershipController extends Controller
                 'plan_id' => $request->plan_id,
                 'start_date' => $request->start_date,
                 'end_date' => $endDate,
-                
+                'remaining_sessions' => $package->max_training_sessions,
             ]);
         }
 
@@ -106,7 +108,12 @@ class UserMembershipController extends Controller
     // عرض صفحة تعديل العضوية
     public function edit(UserMembership $membership)
     {
-        return view('admin.memberships.edit', compact('membership'));
+
+        $users = User::all();
+        $plans = MembershipPlan::all();
+        $packages = MembershipPackage::all();
+
+        return view('memberships.edit', compact('membership', 'users', 'plans', 'packages'));
     }
 
     // تحديث بيانات العضوية

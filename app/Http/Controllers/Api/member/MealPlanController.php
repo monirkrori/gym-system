@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api\member;
 
 use App\Models\MealPlan;
 use App\Http\Controllers\Controller;
-use App\Models\Traits\ApiResponseTrait;
 use App\Http\Requests\member\SubscribeMealPlanRequest;
 
 class MealPlanController extends Controller
 {
-    use ApiResponseTrait;
 
     // Subscribe a user to a meal plan.
 

@@ -3,6 +3,7 @@
 @section('title', 'تعديل خطة الاشتراك')
 
 @section('content')
+@can('manage-membership-plan')
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800"><i class="bi bi-pencil-square me-2"></i> تعديل خطة الاشتراك</h1>
 
@@ -20,7 +21,7 @@
             <div class="card-body">
                 <form action="{{ route('admin.membership-plans.update', $membershipPlan->id) }}" method="POST">
                     @csrf
-                    @method('PUT') {{-- تحديد طريقة التحديث --}}
+                    @method('PUT') 
 
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -54,4 +55,5 @@
             </div>
         </div>
     </div>
+@endcan
 @endsection

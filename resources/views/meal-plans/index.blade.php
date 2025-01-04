@@ -106,6 +106,10 @@
                                     <td>{{ Str::limit($plan->description, 50, '...') }}</td>
                                     <td>
                                         <div class="action-buttons d-flex gap-1">
+                                            <a href="{{ route('admin.meal-plans.show', $plan->id) }}" class="btn btn-sm btn-info" title="عرض">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            @can('manage-meal-plans')
                                             <a href="{{ route('admin.meal-plans.edit', $plan->id) }}" class="btn btn-sm btn-warning" title="تعديل">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
@@ -116,6 +120,7 @@
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>

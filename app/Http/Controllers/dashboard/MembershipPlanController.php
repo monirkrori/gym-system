@@ -40,6 +40,11 @@ class MembershipPlanController extends Controller
         return redirect()->route('admin.membership-plans.index')->with('success', 'Membership Plan updated successfully.');
     }
 
+    public function show(MembershipPlan $membershipPlan)
+    {
+        return view('membership-plans.show', compact('membershipPlan'));
+    }
+
     public function destroy(MembershipPlan $membershipPlan)
     {
         $membershipPlan->delete();

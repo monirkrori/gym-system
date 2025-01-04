@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\dashboard;
 
+use function view;
+use function abort;
+use App\Models\User;
+use App\Models\Trainer;
+use Illuminate\Http\Request;
+use App\Models\UserMembership;
 use App\Exports\TrainersExport;
 use App\Http\Controllers\Controller;
-use App\Models\Trainer;
-use App\Models\User;
-use App\Models\UserMembership;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use function abort;
-use function view;
 
 class TrainerController extends Controller
 {
@@ -24,6 +23,12 @@ class TrainerController extends Controller
         $activeTrainer = Trainer::where('status', 'available')->count();
 
         return view('trainers.index', compact('trainers', 'totalTrainers', 'activeTrainer'));
+    }
+    public function show(Trainer $trainer)
+    {
+        $this->authorize('view-trainer'); 
+
+        return view('trainers.show', compact('trainer'));
     }
 
     /**

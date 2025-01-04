@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api\member;
 use App\Models\UserMembership;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Request;
 
 class UserMembershipController extends Controller
 {
-     use ApiResponseTrait;
         // Subscribe to a membership package
         public function subscribeToMembership(Request $request)
         {

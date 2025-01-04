@@ -6,24 +6,24 @@ use App\Models\User;
 use App\Models\AttendanceLog;
 use App\Models\TrainingSession;
 use App\Http\Controllers\Controller;
-use App\Models\Traits\ApiResponseTrait;
 use App\Http\Requests\member\StoreAttendanceRequest;
 
 class AttendanceController extends Controller
 {
-    use ApiResponseTrait;
 
     // Store member attendance.
 
     public function store(StoreAttendanceRequest $request)
     {
+        $user = auth()->user();
+
         // Check if the session is scheduled
         $trainingSession = TrainingSession::find($request->training_session_id);
         if ($trainingSession->status !== 'scheduled') {
             return $this->errorResponse('Training session is not available for attendance.');
         }
 
-        // Check if the user exists 
+        // Check if the user exists
         $user = User::find($request->user_id);
         if (!$user) {
             return $this->errorResponse('User not found.', 404);
@@ -31,7 +31,7 @@ class AttendanceController extends Controller
 
         // Record attendance
         $attendance = AttendanceLog::create([
-            'user_id' => $request->user_id,
+            'user_id' => $user->id,
             'training_session_id' => $request->training_session_id,
             'check_in' => $request->check_in,
             'check_out' => $request->check_out,

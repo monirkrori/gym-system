@@ -3,14 +3,12 @@ namespace App\Http\Controllers\Api\member;
 
 use App\Models\Rating;
 use App\Http\Controllers\Controller;
-use App\Models\Traits\ApiResponseTrait;
 use App\Http\Requests\member\ReplyRatingRequest;
 use App\Http\Requests\member\StoreRatingRequest;
 use App\Http\Requests\member\UpdateRatingRequest;
 
 class RatingController extends Controller
 {
-    use ApiResponseTrait;
 
     public function store(StoreRatingRequest $request)
     {

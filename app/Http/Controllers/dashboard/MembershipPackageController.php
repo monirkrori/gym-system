@@ -28,6 +28,12 @@ class MembershipPackageController extends Controller
         return redirect()->route('admin.membership-packages.index')->with('success', 'membership Package created successfully.');
     }
 
+    public function show(MembershipPackage $membershipPackage)
+    {
+        return view('membership-packages.show', compact('membershipPackage'));
+    }
+
+
 
     public function edit(MembershipPackage $membershipPackage)
     {

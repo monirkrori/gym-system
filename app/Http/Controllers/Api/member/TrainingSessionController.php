@@ -6,18 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\TrainingSession;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Traits\ApiResponseTrait;
 
 class TrainingSessionController extends Controller
 {
-    use ApiResponseTrait;
-
     // Display available training sessions for the member
     public function listSessions(Request $request)
     {
         $user = Auth::user();
 
-    // Retrieve sessions available for the user 
+    // Retrieve sessions available for the user
     $sessions = TrainingSession::where('status', 'scheduled')
         ->whereColumn('current_capacity', '<', 'max_capacity')
         ->where('start_time', '>', now())  // Only future sessions

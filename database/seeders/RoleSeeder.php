@@ -37,6 +37,10 @@ class RoleSeeder extends Seeder
             //permissions to booking
             'book-session',
             'track-attendance',
+            //permissions to membership-package
+            'manage-membership-package',
+            //permissions to membership-plan
+            'manage-membership-plan',
             //permissions to members
             'view-membership',
             'create-membership',

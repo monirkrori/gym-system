@@ -31,7 +31,7 @@ class MealPlanController extends Controller
     }
     public function show(MealPlan $mealPlan)
     {
-        return view('meal_plans.show', compact('mealPlan'));
+        return view('meal-plans.show', compact('mealPlan'));
     }
 
 

@@ -36,6 +36,13 @@ class EquipmentController extends Controller
         return view('equipments.edit', compact('equipment'));
     }
 
+    public function show(Equipment $equipment)
+    {
+        
+        return view('equipments.show', compact('equipment'));
+    }
+
+
     public function update(UpdateEquipmentRequest $request, Equipment $equipment)
     {
         $equipment->update($request->validated());

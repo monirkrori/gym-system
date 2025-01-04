@@ -93,7 +93,7 @@
                                 <th>#</th>
                                 <th>اسم الباقة</th>
                                 <th>السعر</th>
-                                <th>المدة (بالأشهر)</th>
+                                <th>عدد الجلسات</th>
                                 <th>الحالة</th>
                                 <th>الإجراءات</th>
                             </tr>
@@ -104,14 +104,18 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $package->name }}</td>
                                     <td>{{ $package->price }}$</td>
-                                    <td>{{ $package->duration }}</td>
+                                    <td>{{ $package->max_training_sessions }}</td>
                                     <td>
                                         <span class="badge {{ $package->status == 'active' ? 'bg-success' : 'bg-danger' }}">
                                             {{ $package->status == 'active' ? 'نشطة' : 'غير نشطة' }}
                                         </span>
                                     </td>
                                     <td>
+                                        @can('manage-membership-package')
                                         <div class="action-buttons d-flex gap-1">
+                                            <a href="{{ route('admin.membership-packages.show', $package->id) }}" class="btn btn-sm btn-info" title="عرض">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
                                             <a href="{{ route('admin.membership-packages.edit', $package->id) }}" class="btn btn-sm btn-warning" title="تعديل">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
@@ -123,6 +127,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

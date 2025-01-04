@@ -112,7 +112,11 @@
                                         </span>
                                     </td>
                                     <td>
+                                        @can('manage-membership-plan')
                                         <div class="action-buttons d-flex gap-1">
+                                            <a href="{{ route('admin.membership-plans.show', $plan->id) }}" class="btn btn-sm btn-info" title="عرض">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
                                             <a href="{{ route('admin.membership-plans.edit', $plan->id) }}" class="btn btn-sm btn-warning" title="تعديل">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
@@ -124,6 +128,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

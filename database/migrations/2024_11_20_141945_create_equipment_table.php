@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('equipment', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type');
+            $table->string('type')->nullable();
             $table->enum('status', ['available', 'maintenance'])->default('available');
             $table->text('description')->nullable();
 

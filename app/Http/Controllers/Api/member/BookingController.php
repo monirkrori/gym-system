@@ -7,14 +7,12 @@ use App\Models\Booking;
 use App\Models\UserMembership;
 use App\Models\TrainingSession;
 use App\Http\Controllers\Controller;
-use App\Models\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\member\BookSessionRequest;
 use App\Http\Requests\member\CancelSessionRequest;
 
 class BookingController extends Controller
 {
-    use ApiResponseTrait;
 
 //  Book a training session for a user
 
@@ -114,7 +112,7 @@ class BookingController extends Controller
 //--------------------------------------------------------------------------------//
 
     //get booking history for a user
-    
+
     public function getBookingHistory(Request $request)
     {
         $user = auth()->user();

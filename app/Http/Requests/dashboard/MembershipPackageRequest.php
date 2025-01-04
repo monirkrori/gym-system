@@ -16,8 +16,7 @@ class MembershipPackageRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'duration_days' => 'required|integer|min:1',
-            'max_training_sessions' => 'nullable|integer|min:0',
+            'max_training_sessions' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'status' => 'required|in:active,expired',
         ];

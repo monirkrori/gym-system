@@ -14,7 +14,6 @@ class StoreAttendanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,id', // Valid user_id
             'training_session_id' => 'required|exists:training_sessions,id', // Valid training session
             'check_in' => 'required|date|before_or_equal:now', // Check-in time should be now or before
             'check_out' => 'nullable|date|after:check_in', // Check-out time, must be after check-in if exists
@@ -26,7 +25,6 @@ class StoreAttendanceRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_id.required' => 'The user ID is required.',
             'training_session_id.required' => 'The training session ID is required.',
             'check_in.required' => 'The check-in time is required.',
             'check_out.after' => 'Check-out time must be after check-in time.',
