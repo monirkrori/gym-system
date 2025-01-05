@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->foreignId('package_id')->nullable()->constrained('membership_packages')->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('remaining_sessions');
+            $table->integer('remaining_sessions')->default(1);
             $table->enum('status', ['active', 'expired', 'cancelled']);
             $table->timestamps();
         });

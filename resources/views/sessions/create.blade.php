@@ -3,6 +3,7 @@
 @section('title', 'إضافة جلسة جديدة')
 
 @section('content')
+@can('create-sessions')
 <div class="container">
     <h1 class="mb-4">إضافة جلسة جديدة</h1>
 
@@ -72,4 +73,5 @@
         <button type="submit" class="btn btn-primary">إضافة الجلسة</button>
     </form>
 </div>
+@endcan
 @endsection

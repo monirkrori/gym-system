@@ -12,14 +12,14 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'email', 'password', 'phone_number', 'gender'];
+    protected $fillable = ['name', 'email', 'password', 'phone_number','gender'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -39,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
 
 
     public function membership()
@@ -65,6 +66,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Notification::class);
     }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 
-
+    public function mealPlan()
+    {
+        return $this->belongsTo(MealPlan::class);
+    }
 }

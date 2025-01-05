@@ -3,6 +3,7 @@
 @section('title', 'إضافة خطة اشتراك جديدة')
 
 @section('content')
+@can('manage-membership-plan')
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800"><i class="bi bi-plus-circle me-2"></i> إضافة خطة اشتراك جديدة</h1>
          @if ($errors->any())
@@ -51,4 +52,5 @@
             </div>
         </div>
     </div>
+@endcan
 @endsection

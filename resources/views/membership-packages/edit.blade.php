@@ -15,6 +15,7 @@
 @endpush
 
 @section('content')
+@can('manage-membership-package')
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 text-gray-800">
@@ -47,16 +48,6 @@
                             class="form-control @error('price') is-invalid @enderror"
                             value="{{ old('price', $membershipPackage->price) }}" step="0.01" required>
                         @error('price')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="duration_days" class="form-label">المدة (بالأيام)</label>
-                        <input type="number" id="duration_days" name="duration_days"
-                            class="form-control @error('duration_days') is-invalid @enderror"
-                            value="{{ old('duration_days', $membershipPackage->duration_days) }}" required>
-                        @error('duration_days')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -97,4 +88,5 @@
             </div>
         </div>
     </div>
+@endcan
 @endsection

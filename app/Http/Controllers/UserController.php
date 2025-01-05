@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\dashboard\StoreUserRequest;
-use App\Http\Requests\dashboard\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\dashboard\StoreUserRequest;
+use App\Http\Requests\dashboard\UpdateUserRequest;
+use App\Http\Requests\UpdateProfilePictureRequest;
 
 class UserController extends Controller
 {
@@ -125,4 +126,5 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->withSuccess('User is deleted successfully.');
     }
+
 }

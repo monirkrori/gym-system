@@ -5,7 +5,6 @@ namespace App\Http\Controllers\dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\dashboard\StoreEquipmentRequest;
 use App\Http\Requests\dashboard\UpdateEquipmentRequest;
-use Illuminate\Http\Request;
 use App\Models\Equipment;
 
 class EquipmentController extends Controller
@@ -36,15 +35,22 @@ class EquipmentController extends Controller
         return view('equipments.edit', compact('equipment'));
     }
 
+    public function show(Equipment $equipment)
+    {
+
+        return view('equipments.show', compact('equipment'));
+    }
+
+
     public function update(UpdateEquipmentRequest $request, Equipment $equipment)
     {
         $equipment->update($request->validated());
-        return redirect()->route('admin.equipments.index')->with('success', 'Equipment updated successfully.');
+        return redirect()->route('admin.equipments.index')->with('success','Equipment updated successfully.');
     }
 
     public function destroy(Equipment $equipment)
     {
         $equipment->delete();
-        return redirect()->route('admin.equipments.index')->with('success', 'Equipment updated successfully.');
+        return redirect()->route('admin.equipments.index')->with('success','Equipment updated successfully.' );
     }
 }

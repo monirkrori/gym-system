@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activaty;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -35,7 +35,7 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Activaty $activaty)
+    public function show(Activity $Activity)
     {
         //
     }
@@ -43,7 +43,7 @@ class ActivityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Activaty $activaty)
+    public function edit(Activity $Activity)
     {
         //
     }
@@ -51,7 +51,7 @@ class ActivityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Activaty $activaty)
+    public function update(Request $request, Activity $Activity)
     {
         //
     }
@@ -59,7 +59,7 @@ class ActivityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Activaty $activaty)
+    public function destroy(Activity $Activity)
     {
         //
     }

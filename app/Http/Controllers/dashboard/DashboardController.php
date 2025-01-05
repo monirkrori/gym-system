@@ -33,6 +33,11 @@ class DashboardController extends Controller
         $latestActivities = $this->dashboardService->getLatestActivities();
         $todaySchedule = $this->dashboardService->getTodaySchedule();
 
+        $activeMembers = UserMembership::where('status', 'active')->count();
+        $revenueData = $this->dashboardService->calculateMonthlyRevenue();
+        $monthlyRevenue = $revenueData['monthlyRevenue'];
+        $todaySessions = $this->dashboardService->getTodaySchedule();
+
         return view('dashboard.index', compact(
             'membershipMetrics',
             'revenueMetrics',
@@ -41,7 +46,11 @@ class DashboardController extends Controller
             'membershipStats',
             'packageDistribution',
             'latestActivities',
-            'todaySchedule'
+            'todaySchedule',
+            'activeMembers',
+            'monthlyRevenue',
+            'todaySessions',
+           
         ));
     }
 

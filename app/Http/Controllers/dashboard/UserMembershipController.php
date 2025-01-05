@@ -27,8 +27,11 @@ class UserMembershipController extends Controller
     {
         $statistics = $this->membershipService->getMembershipStatistics();
         $memberships = $this->membershipService->getMembershipsPaginated();
+        $totalMembers = UserMembership::count();
+        $activeMembers = UserMembership::where('status', 'active')->count();
+        $expiredMembers = UserMembership::where('status', 'expired')->count();
 
-        return view('memberships.index', compact('memberships', 'statistics'));
+        return view('memberships.index', compact('memberships', 'statistics','totalMembers','activeMembers','expiredMembers'));
     }
 
     public function create()
@@ -60,10 +63,15 @@ class UserMembershipController extends Controller
 
     public function edit(UserMembership $membership)
     {
-        return view('memberships.edit', compact('membership'));
+        return view('memberships.edit', [
+            'membership' => $membership,
+            'users' => User::all(),
+            'plans' => MembershipPlan::where('status', 'active')->get(),
+            'packages' => MembershipPackage::where('status', 'active')->get()
+        ]);
     }
 
-    public function update(Request $request, UserMembership $membership)
+    public function update(UserMemberShipRequest $request, UserMembership $membership)
     {
         $this->membershipService->updateMembership($membership, $request->validated());
         return redirect()->route('admin.memberships.index')->with('success', 'تم تحديث العضوية بنجاح!');

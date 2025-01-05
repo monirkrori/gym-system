@@ -10,5 +10,10 @@ class MealPlan extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'calories_per_day'];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
 

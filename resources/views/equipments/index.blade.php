@@ -62,7 +62,6 @@
             </a>
         </div>
 
-        <!-- Cards Section -->
         <div class="row g-4 mb-4">
             @foreach ([
                 ['title' => 'إجمالي المعدات', 'value' => $totalEquipments, 'gradient' => '--primary-gradient', 'icon' => 'bi bi-tools'],
@@ -87,7 +86,6 @@
             @endforeach
         </div>
 
-        <!-- Main Table -->
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
@@ -114,16 +112,21 @@
                                     </td>
                                     <td>
                                         <div class="action-buttons d-flex gap-1">
-                                            <a href="{{ route('admin.equipments.edit', $equipment->id) }}" class="btn btn-sm btn-warning" title="تعديل">
-                                                <i class="bi bi-pencil"></i>
+                                            @can('manage-equipment')
+                                            <a href="{{ route('admin.equipments.show', $equipment->id) }}" class="btn btn-sm btn-info" title="عرض">
+                                                <i class="bi bi-eye"></i>
                                             </a>
-                                            <form action="{{ route('admin.equipments.destroy', $equipment->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="حذف" onclick="return confirm('هل أنت متأكد من الحذف؟')">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                                <a href="{{ route('admin.equipments.edit', $equipment->id) }}" class="btn btn-sm btn-warning" title="تعديل">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <form action="{{ route('admin.equipments.destroy', $equipment->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="حذف" onclick="return confirm('هل أنت متأكد من الحذف؟')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -157,4 +160,3 @@
         });
     </script>
 @endpush
-

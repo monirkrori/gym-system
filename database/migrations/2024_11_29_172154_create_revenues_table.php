@@ -9,7 +9,7 @@ class CreateRevenuesTable extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('revenues', function (Blueprint $table) {
             $table->id();
@@ -25,7 +25,7 @@ class CreateRevenuesTable extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('revenues');
     }

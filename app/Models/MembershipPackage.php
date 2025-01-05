@@ -11,9 +11,9 @@ class MembershipPackage extends Model
 
     protected $fillable = ['plan_id', 'name', 'price', 'duration_days', 'max_training_sessions', 'difficulty_level', 'description', 'status', 'meal_plan_id'];
 
-    public function plan()
+    public function plans()
     {
-        return $this->belongsTo(MembershipPlan::class);
+        return $this->belongsToMany(MembershipPlan::class);
     }
 
     public function mealPlan()

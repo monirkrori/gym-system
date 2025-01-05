@@ -25,6 +25,12 @@ class TrainerController extends Controller
 
         return view('trainers.index', compact('trainers', 'totalTrainers', 'activeTrainer'));
     }
+    public function show(Trainer $trainer)
+    {
+        $this->authorize('view-trainer');
+
+        return view('trainers.show', compact('trainer'));
+    }
 
     /**
      * Show the form for creating a new trainer.
@@ -90,10 +96,10 @@ class TrainerController extends Controller
         $this->authorize('edit-trainer'); // صلاحية تعديل مدرب
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:trainers,email,' . $trainer->id,
-            'specialty' => 'required|string|max:255',
-            'status' => 'required|in:active,inactive',
+            'specialization' => 'required|string|max:255',
+            'experience_years' => 'required|integer|min:0',
+            'status' => 'required|in:available,unavailable',
+            'rating_avg' => 'nullable|numeric|min:0|max:5',
         ]);
 
         $trainer->update($validated);

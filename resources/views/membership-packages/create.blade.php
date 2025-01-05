@@ -3,6 +3,7 @@
 @section('title', 'إضافة باقة عضوية جديدة')
 
 @section('content')
+@can('manage-membership-package')
     <div class="container-fluid">
        @if ($errors->any())
                 <div class="alert alert-danger">
@@ -49,21 +50,10 @@
                         @enderror
                     </div>
 
-                    <!-- Duration Days Field -->
-                    <div class="mb-3">
-                        <label for="duration_days" class="form-label">المدة (بالأيام) <span class="text-danger">*</span></label>
-                        <input type="number" id="duration_days" name="duration_days"
-                            class="form-control @error('duration_days') is-invalid @enderror"
-                            value="{{ old('duration_days') }}" placeholder="أدخل مدة الباقة بالأيام" min="1">
-                        @error('duration_days')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     <!-- Max Training Sessions Field -->
                     <div class="mb-3">
                         <label for="max_training_sessions" class="form-label">عدد الجلسات التدريبية </label>
-                        <input type="number" id="max_training_sessions" name="max_training_sessions requited"
+                        <input type="number" id="max_training_sessions" name="max_training_sessions" 
                             class="form-control @error('max_training_sessions') is-invalid @enderror"
                             value="{{ old('max_training_sessions') }}" placeholder="أدخل عدد الجلسات التدريبية" min="0">
                         @error('max_training_sessions')
@@ -101,4 +91,5 @@
             </div>
         </div>
     </div>
+@endcan
 @endsection

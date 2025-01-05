@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\dashboard;
 
+use Illuminate\Http\Request;
+use App\Models\MembershipPlan;
+use App\Models\UserMembership;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\dashboard\MembershipPlanRequest;
-use App\Models\MembershipPlan;
-use Illuminate\Http\Request;
 
 class MembershipPlanController extends Controller
 
-{
-    public function index()
     {
+        public function index(){
         $membershipPlans = MembershipPlan::paginate(10);
         $totalmembershipPlans = MembershipPlan::count();
-
         return view('membership-plans.index', compact('membershipPlans', 'totalmembershipPlans'));
     }
 
@@ -41,9 +40,14 @@ class MembershipPlanController extends Controller
         return redirect()->route('admin.membership-plans.index')->with('success', 'Membership Plan updated successfully.');
     }
 
+    public function show(MembershipPlan $membershipPlan)
+    {
+        return view('membership-plans.show', compact('membershipPlan'));
+    }
+
     public function destroy(MembershipPlan $membershipPlan)
     {
         $membershipPlan->delete();
         return redirect()->route('admin.membership-plans.index')->with('success', 'Membership Plan deleted successfully.');
     }
-}
+    }

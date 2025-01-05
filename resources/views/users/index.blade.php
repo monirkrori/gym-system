@@ -4,7 +4,12 @@
 <div class="container mx-auto p-4">
     <div class="bg-white shadow-md rounded-lg p-6">
         <div class="flex justify-between items-center mb-4">
+            <a href="{{ route('admin.dashboard') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                <i class="bi bi-arrow-left-circle"></i> Back to Dashboard
+            </a>
+
             <h1 class="text-2xl font-bold text-gray-700">Manage Users</h1>
+
             @can('create-user')
                 <a href="{{ route('admin.users.create') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
                     <i class="bi bi-plus-circle"></i> Add New User

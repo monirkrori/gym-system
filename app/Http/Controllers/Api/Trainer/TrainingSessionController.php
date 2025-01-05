@@ -8,5 +8,5 @@ use function response;
 
 class TrainingSessionController extends Controller
 {
-    
+
 }

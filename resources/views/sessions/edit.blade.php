@@ -3,6 +3,7 @@
 @section('title', 'تعديل الجلسة')
 
 @section('content')
+@can('update-sessions')
 <div class="container">
     <h1 class="mb-4">تعديل الجلسة: {{ $session->name }}</h1>
 
@@ -73,4 +74,5 @@
         <button type="submit" class="btn btn-primary">تعديل الجلسة</button>
     </form>
 </div>
+@endcan
 @endsection

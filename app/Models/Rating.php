@@ -16,6 +16,12 @@ class Rating extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Define a relationship for the nested replies
+    public function parent()
+    {
+        return $this->belongsTo(Rating::class, 'parent_id');
+    }
+    
     public function rateable()
     {
         return $this->morphTo();

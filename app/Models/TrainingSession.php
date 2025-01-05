@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class TrainingSession extends Model
 {
     use HasFactory;
@@ -17,6 +17,9 @@ class TrainingSession extends Model
         'allowed_membership_levels', 'status'
     ];
 
+
+    protected $dates = ['start_time','end_time'];
+
     public function package()
     {
         return $this->belongsTo(MembershipPackage::class);
@@ -26,16 +29,12 @@ class TrainingSession extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
-
-    public function members()
-    {
-        return $this->belongsToMany(UserMembership::class, 'session_members')
-            ->withPivot('status')
-            ->withTimestamps();
-    }
-
     public function attendees()
     {
         return $this->hasMany(AttendanceLog::class, 'session_id');
+    }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }

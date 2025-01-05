@@ -11,7 +11,7 @@
         <div class="card-body">
             <ul class="list-group">
                 <li class="list-group-item"><strong>اسم الجلسة:</strong> {{ $session->name }}</li>
-                <li class="list-group-item"><strong>التاريخ:</strong> {{ $session->date->format('Y-m-d') }}</li>
+                <li class="list-group-item"><strong>التاريخ:</strong> {{   \Carbon\Carbon::parse($session->start_time)->format('Y-m-d') ?? 'غير محدد' }}</li>
                 <li class="list-group-item"><strong>المدة:</strong> {{ $session->duration }} دقيقة</li>
                 <li class="list-group-item"><strong>الحالة:</strong>
                     <span class="badge badge-status {{ $session->status == 'active' ? 'bg-success' : 'bg-danger' }}">
@@ -21,7 +21,7 @@
             </ul>
         </div>
         <div class="card-footer">
-            <a href="{{ route('sessions.index') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.sessions.index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left me-1"></i> العودة
             </a>
         </div>

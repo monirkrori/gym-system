@@ -48,6 +48,7 @@ class UserMembershipService
             'start_date' => $data['start_date'],
             'end_date' => $endDate,
             'status' => 'active',
+            'remaining_sessions' => $package->max_training_sessions,
         ];
 
         DB::transaction(function () use ($membershipData, $trainer, $user) {

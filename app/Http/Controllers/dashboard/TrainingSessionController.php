@@ -27,6 +27,11 @@ class TrainingSessionController extends Controller
         ]);
     }
 
+    public function show(TrainingSession $session)
+    {
+
+        return view('sessions.show', compact('session'));
+    }
     public function create()
     {
         $trainers = Trainer::all();
