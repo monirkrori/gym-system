@@ -19,4 +19,6 @@ class Trainer extends Model
     {
         return $this->hasMany(TrainingSession::class);
     }
+
+
 }

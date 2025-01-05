@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Trainer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckInRequest;
 use App\Http\Requests\CheckOutRequest;
 use App\Http\Resources\AttendanceLogResource;
 use App\Models\AttendanceLog;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use function now;
+use function response;
 
 class AttendanceLogController extends Controller
 {

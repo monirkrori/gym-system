@@ -27,6 +27,13 @@ class TrainingSession extends Model
         return $this->belongsTo(Trainer::class);
     }
 
+    public function members()
+    {
+        return $this->belongsToMany(UserMembership::class, 'session_members')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
     public function attendees()
     {
         return $this->hasMany(AttendanceLog::class, 'session_id');
