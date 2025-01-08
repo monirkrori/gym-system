@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Activaty extends Model
 {
+
     use HasFactory;
 }

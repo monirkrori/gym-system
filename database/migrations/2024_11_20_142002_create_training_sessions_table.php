@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('attendance_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('training_session_id')->constrained()->onDelete('cascade');
             $table->dateTime('check_in');
             $table->dateTime('check_out')->nullable();
             $table->enum('status', ['present', 'absent'])->default('present');

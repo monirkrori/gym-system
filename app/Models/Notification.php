@@ -12,7 +12,14 @@ class Notification extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'title', 'message', 'type', 'read_at'];
+    protected $fillable = [
+        'description',
+        'user_id',
+        'type_name',
+        'type_color',
+        'status_name',
+        'status_color',
+    ];
 
     public function user()
     {

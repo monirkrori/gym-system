@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -30,7 +31,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to send verification email. Please try again.', 500);
         }
-
+        event(new UserRegistered($user));
         return $this->successResponse($user, 'Register successfully, please verify your email.');
     }
 
@@ -76,7 +77,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        
+
         return $this->successResponse(null, 'Logged out successfully');
     }
 }

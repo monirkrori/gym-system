@@ -8,23 +8,63 @@ use App\Models\AttendanceLog;
 use App\Models\TrainingSession;
 use App\Models\Trainer;
 use App\Models\Activity;
-use App\Repositories\DashboardRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
-    protected $dashboardRepository;
-
-    public function __construct(DashboardRepository $dashboardRepository)
+    public function getActiveMembersCount()
     {
-        $this->dashboardRepository = $dashboardRepository;
+        return UserMembership::where('status', 'active')->count();
+    }
+
+    public function getLastMonthMembersCount()
+    {
+        return UserMembership::where('status', 'active')
+            ->where('created_at', '<=', Carbon::now()->subMonth())
+            ->count();
+    }
+
+    public function getMembershipStatsForLastSixMonths()
+    {
+        $membershipStats = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $startOfMonth = $date->copy()->startOfMonth();
+            $endOfMonth = $date->copy()->endOfMonth();
+
+            // حساب الأعضاء الجدد في هذا الشهر
+            $newMembers = UserMembership::whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year)
+                ->count();
+
+            // حساب العضويات المنتهية بناءً على تاريخ الانتهاء
+            $expiredMembers = UserMembership::where(function($query) use ($startOfMonth, $endOfMonth) {
+                // العضويات التي تنتهي في هذا الشهر
+                $query->whereBetween('end_date', [$startOfMonth, $endOfMonth])
+                    // والعضويات التي حالتها منتهية يدوياً في هذا الشهر
+                    ->orWhere(function($q) use ($startOfMonth, $endOfMonth) {
+                        $q->where('status', 'expired')
+                            ->whereBetween('updated_at', [$startOfMonth, $endOfMonth]);
+                    });
+            })
+                ->count();
+
+            $membershipStats->push([
+                'month' => $date->format('M'),
+                'year' => $date->format('Y'),
+                'new_members' => $newMembers,
+                'expired_members' => $expiredMembers,
+                'net_change' => $newMembers - $expiredMembers
+            ]);
+        }
+        return $membershipStats;
     }
 
     public function calculateMembershipMetrics()
     {
-        $activeMembers = $this->dashboardRepository->getActiveMembersCount();
-        $lastMonthMembers = $this->dashboardRepository->getLastMonthMembersCount();
+        $activeMembers = $this->getActiveMembersCount();
+        $lastMonthMembers = $this->getLastMonthMembersCount();
 
         $newMembersPercentage = $lastMonthMembers > 0
             ? round((($activeMembers - $lastMonthMembers) / $lastMonthMembers) * 100, 1)
@@ -38,15 +78,19 @@ class DashboardService
 
     public function calculateMonthlyRevenue()
     {
-        $monthlyRevenue = UserMembership::join('membership_packages', 'user_memberships.package_id', '=', 'membership_packages.id')
-            ->join('membership_plans', 'user_memberships.plan_id', '=', 'membership_plans.id')
+        $monthlyRevenue = UserMembership::leftJoin('membership_packages', 'user_memberships.package_id', '=', 'membership_packages.id')
+            ->leftJoin('membership_plans', 'user_memberships.plan_id', '=', 'membership_plans.id')
             ->whereMonth('user_memberships.created_at', Carbon::now()->month)
-            ->sum(DB::raw('membership_packages.price + membership_plans.price'));
+            ->sum(DB::raw('
+            COALESCE(membership_plans.price, 0) + COALESCE(membership_packages.price, 0)
+        '));
 
-        $lastMonthRevenue = UserMembership::join('membership_packages', 'user_memberships.package_id', '=', 'membership_packages.id')
-            ->join('membership_plans', 'user_memberships.plan_id', '=', 'membership_plans.id')
+        $lastMonthRevenue = UserMembership::leftJoin('membership_packages', 'user_memberships.package_id', '=', 'membership_packages.id')
+            ->leftJoin('membership_plans', 'user_memberships.plan_id', '=', 'membership_plans.id')
             ->whereMonth('user_memberships.created_at', Carbon::now()->subMonth()->month)
-            ->sum(DB::raw('membership_packages.price + membership_plans.price'));
+            ->sum(DB::raw('
+            COALESCE(membership_plans.price, 0) + COALESCE(membership_packages.price, 0)
+        '));
 
         $revenueGrowth = $lastMonthRevenue > 0
             ? round((($monthlyRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100, 1)
@@ -54,9 +98,10 @@ class DashboardService
 
         return [
             'monthlyRevenue' => $monthlyRevenue,
-            'revenueGrowth' => $revenueGrowth
+            'revenueGrowth' => $revenueGrowth,
         ];
     }
+
 
     public function calculateSessionAndTrainerMetrics()
     {
@@ -100,7 +145,6 @@ class DashboardService
                 ];
             });
     }
-
 
     private function generateColorForPackage($packageName)
     {

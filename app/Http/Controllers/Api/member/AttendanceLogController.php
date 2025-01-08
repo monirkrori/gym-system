@@ -8,30 +8,39 @@ use App\Models\TrainingSession;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\member\StoreAttendanceRequest;
 
-class AttendanceController extends Controller
+class AttendanceLogController extends Controller
 {
 
-    // Store member attendance.
-
+    /**
+     * Store member attendance.
+     */
     public function store(StoreAttendanceRequest $request)
     {
+        // Get the authenticated user
         $user = auth()->user();
 
-        // Check if the session is scheduled
-        $trainingSession = TrainingSession::find($request->training_session_id);
-        if ($trainingSession->status !== 'scheduled') {
-            return $this->errorResponse('Training session is not available for attendance.');
+        if (!$user) {
+            return $this->errorResponse('Unauthorized.', 401);
         }
 
-        // Check if the user exists
-        $user = User::find($request->user_id);
-        if (!$user) {
-            return $this->errorResponse('User not found.', 404);
+        // Check if the training session exists and is scheduled
+        $trainingSession = TrainingSession::find($request->training_session_id);
+        if (!$trainingSession || $trainingSession->status !== 'scheduled') {
+            return $this->errorResponse('Training session is not available for attendance.', 404);
+        }
+//        $user = User::findOrFill($request->user->id);
+        // Check if attendance already exists for this session and user
+        $existingAttendance = AttendanceLog::where('user_id', $request->user->id)
+            ->where('training_session_id', $request->training_session_id)
+            ->first();
+
+        if ($existingAttendance) {
+            return $this->errorResponse('Attendance already recorded for this session.', 409);
         }
 
         // Record attendance
         $attendance = AttendanceLog::create([
-            'user_id' => $user->id,
+            'user_id' => $request->user->id,
             'training_session_id' => $request->training_session_id,
             'check_in' => $request->check_in,
             'check_out' => $request->check_out,
