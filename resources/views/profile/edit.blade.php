@@ -44,7 +44,7 @@
                         <p class="text-gray-500 dark:text-gray-400">{{ $user->email }}</p>
                     </div>
 
-                    <form action="{{ route('admin.profile.update') }}" method="POST">
+                    <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -92,6 +92,12 @@
                                     </svg>
                                 </span>
                             </div>
+                        </div>
+
+                        {{-- Profile Photo Input --}}
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">صورة الملف الشخصي</label>
+                            <input type="file" name="profile_photo" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent dark:bg-gray-700 dark:text-white transition duration-300">
                         </div>
 
                         {{-- Submit Button --}}
