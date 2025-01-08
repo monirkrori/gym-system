@@ -13,7 +13,7 @@ class BookSessionRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // Assuming authorization is handled by middleware
+        return true;
     }
 
     /**

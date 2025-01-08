@@ -20,7 +20,7 @@ class MealPlanController extends Controller
     $mealPlan = MealPlan::findOrFail($request->meal_plan_id);
 
     // Check if the user is already subscribed to a meal plan
-    if ($user->mealPlan) {
+    if ($mealPlan) {
         return $this->errorResponse('User is already subscribed to a meal plan.');
     }
 

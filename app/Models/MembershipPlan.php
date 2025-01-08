@@ -10,7 +10,7 @@ class   MembershipPlan extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'price', 'duration_month', 'description', 'is_active'];
+    protected $fillable = ['name', 'price', 'duration_month', 'description', 'status'];
 
     public function packages()
     {

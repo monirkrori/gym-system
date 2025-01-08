@@ -15,8 +15,8 @@ class Trainer extends Model
         return $this->belongsTo(User::class);
     }
 
-public function sessions()
-{
-return $this->hasMany(TrainingSession::class);
-}
+    public function sessions()
+    {
+        return $this->hasMany(TrainingSession::class);
+    }
 }
