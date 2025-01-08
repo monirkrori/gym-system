@@ -90,52 +90,54 @@
         <!-- Header Section with Permissions Check -->
         @can('view-member')
             <div class="d-flex justify-content-between align-items-center mb-4">
+                <!-- Title -->
                 <h1 class="h3 mb-0 text-gray-800">
                     <i class="bi bi-people-fill me-2"></i> إدارة العضويات
                 </h1>
 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
+                <!-- Buttons Section -->
                 <div class="d-flex align-items-center gap-2">
-                    @can('export-memberships')
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle">
-                                <i class="bi bi-download me-2"></i> تصدير
-                            </button>
-                            <ul class="dropdown-menu">
-                                @can('export-memberships-excel')
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('admin.memberships.exports-excel') }}">
-                                            <i class="bi bi-file-earmark-excel me-2 text-success"></i> تصدير Excel
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('export-memberships-pdf')
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('admin.memberships.export.pdf') }}">
-                                            <i class="bi bi-file-earmark-pdf me-2 text-danger"></i> تصدير PDF
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </div>
-                    @endcan
-
+                    <!-- Add Membership Button -->
                     @can('create-membership')
                         <a href="{{ route('admin.memberships.create') }}" class="btn btn-primary">
                             <i class="bi bi-plus-lg me-1"></i> إضافة عضوية
                         </a>
                     @endcan
+
+                    <!-- Export Buttons -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-download me-1"></i> تصدير
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.trainers.export', 'pdf') }}">
+                                    <i class="bi bi-file-earmark-pdf me-2 text-danger"></i> PDF
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.trainers.export', 'excel') }}">
+                                    <i class="bi bi-file-earmark-spreadsheet me-2 text-success"></i> Excel
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+
+            <!-- Error Messages -->
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        @endcan
+    </div>
+
 
             <!-- Stats Cards with Gradient Backgrounds -->
             <div class="row g-4 mb-4">
@@ -268,7 +270,7 @@
                             @endforeach
                             </tbody>
                         </table>
-
+            @can('view-member')
                         <div class="mt-4">
                             {{ $memberships->links() }}
                         </div>
@@ -279,6 +281,7 @@
             <div class="alert alert-danger" role="alert">
                 <i class="bi bi-shield-lock me-2"></i> ليس لديك الصلاحية للوصول إلى هذه الصفحة
             </div>
+
         @endcan
     </div>
 @endsection

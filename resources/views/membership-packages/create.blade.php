@@ -53,7 +53,7 @@
                     <!-- Max Training Sessions Field -->
                     <div class="mb-3">
                         <label for="max_training_sessions" class="form-label">عدد الجلسات التدريبية </label>
-                        <input type="number" id="max_training_sessions" name="max_training_sessions" 
+                        <input type="number" id="max_training_sessions" name="max_training_sessions"
                             class="form-control @error('max_training_sessions') is-invalid @enderror"
                             value="{{ old('max_training_sessions') }}" placeholder="أدخل عدد الجلسات التدريبية" min="0">
                         @error('max_training_sessions')

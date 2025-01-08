@@ -86,21 +86,38 @@
 @endpush
 
 @section('content')
-    <div class="container-fluid">
-        @can('view-trainer')
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">
-                    <i class="bi bi-person-video3 me-2"></i> إدارة المدربين
-                </h1>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0 text-gray-800">
+          <i class="bi bi-person-video3 me-2"></i> إدارة المدربين
+      </h1>
 
-                <div class="d-flex align-items-center gap-2">
-                    @can('create-trainer')
-                        <a href="{{ route('admin.trainers.create') }}" class="btn btn-primary">
-                            <i class="bi bi-plus-lg me-1"></i> إضافة مدرب
-                        </a>
-                    @endcan
-                </div>
-            </div>
+      <div class="d-flex align-items-center gap-2">
+          @can('create-trainer')
+              <a href="{{ route('admin.trainers.create') }}" class="btn btn-primary">
+                  <i class="bi bi-plus-lg me-1"></i> إضافة مدرب
+              </a>
+          @endcan
+
+          <!-- Export Buttons -->
+          <div class="btn-group">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-download me-1"></i> تصدير
+              </button>
+              <ul class="dropdown-menu">
+                  <li>
+                      <a class="dropdown-item" href="{{ route('admin.trainers.export', 'pdf') }}">
+                          <i class="bi bi-file-earmark-pdf me-2 text-danger"></i> PDF
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item" href="{{ route('admin.trainers.export', 'excel') }}">
+                          <i class="bi bi-file-earmark-spreadsheet me-2 text-success"></i> Excel
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
 
             <!-- Cards Section -->
             <div class="row g-4 mb-4">
@@ -216,7 +233,7 @@
                             @endforeach
                             </tbody>
                         </table>
-
+            @can('view-trainer')
                         <div class="mt-4">
                             {{ $trainers->links() }}
                         </div>

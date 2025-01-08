@@ -107,9 +107,9 @@
                                     <td>{{ $plan->price }}$</td>
                                     <td>{{ $plan->duration_month }}</td>
                                     <td>
-                                        <span class="badge {{ $plan->status = 'active' ? 'bg-success' : 'bg-danger' }}">
-                                            {{ $plan->status == 'active' ? 'نشطة' : 'غير نشطة' }}
-                                        </span>
+                                         <span class="badge {{ $plan->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                              {{ $plan->status == 'active' ? 'نشطة' : 'غير نشطة' }}
+                                         </span>
                                     </td>
                                     <td>
                                         @can('manage-membership-plan')

@@ -29,7 +29,5 @@
         <a href="{{ route('password.request') }}" class="text-sm text-blue-500 hover:underline">هل نسيت كلمة المرور؟</a>
 
     </div>
-    <div class="mt-4 text-center">
-         <p class="text-sm text-gray-600">ليس لديك حساب؟ <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-500">إنشاء حساب جديد</a></p>
-    </div>
+
 @endsection

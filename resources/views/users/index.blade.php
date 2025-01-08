@@ -45,7 +45,7 @@
                                     <a href="{{ route('admin.users.show', $user->id) }}" class="text-yellow-500 hover:text-yellow-600">
                                         <i class="bi bi-eye text-lg"></i>
                                     </a>
-                                    @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) && Auth::user()->hasRole('Super Admin') || !in_array('Super Admin', $user->getRoleNames()->toArray() ?? []))
+                                    @if (in_array('Super admin', $user->getRoleNames()->toArray() ?? []) && Auth::user()->hasRole('Super admin') || !in_array('Super admin', $user->getRoleNames()->toArray() ?? []))
                                         @can('edit-user')
                                             <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-600">
                                                 <i class="bi bi-pencil-square text-lg"></i>

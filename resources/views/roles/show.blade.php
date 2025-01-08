@@ -24,7 +24,7 @@
                     <div class="mb-3 row">
                         <label for="roles" class="col-md-4 col-form-label text-md-end text-start"><strong>Permissions:</strong></label>
                         <div class="col-md-6" style="line-height: 35px;">
-                            @if ($role->name=='Super Admin')
+                            @if ($role->name=='Super admin')
                                 <span class="badge bg-primary">All</span>
                             @else
                                 @forelse ($rolePermissions as $permission)

@@ -47,9 +47,6 @@
                     تسجيل الدخول
                 </a>
 
-                <a href="{{ route('register') }}" class="block w-full border-2 border-emerald-600 text-emerald-600 px-6 py-3 rounded-lg hover:bg-emerald-50 transition-all duration-300 ease-in-out">
-                    إنشاء حساب جديد
-                </a>
             @endif
         </div>
     </div>

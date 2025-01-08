@@ -113,89 +113,101 @@
                 @endcan
         </div>
         <!-- النشاطات والإجراءات السريعة -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            @can('view-activities')
-                <div class="col-span-2 bg-white shadow-lg rounded-2xl p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-semibold text-xl text-gray-800">آخر النشاطات</h4>
-                        @can('list-activities')
-                            <a href="{{ route('admin.activities.index') }}" class="text-blue-600 hover:text-blue-800 transition">عرض الكل</a>
-                        @endcan
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-100">
-                            <tr>
-                                <th class="px-4 py-3 text-gray-600">النشاط</th>
-                                <th class="px-4 py-3 text-gray-600">العضو</th>
-                                <th class="px-4 py-3 text-gray-600">النوع</th>
-                                <th class="px-4 py-3 text-gray-600">التاريخ</th>
-                                <th class="px-4 py-3 text-gray-600">الحالة</th>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    @can('view-activities')
+        <div class="col-span-2 bg-white shadow-xl rounded-2xl p-6 transform transition duration-300 hover:shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="font-semibold text-2xl text-gray-800 flex items-center">
+                    <i class="bi bi-activity text-blue-500 text-3xl mr-3"></i>
+                    آخر النشاطات
+                </h4>
+               
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gradient-to-r from-blue-500 to-blue-600">
+                        <tr>
+                            <th class="px-6 py-4 text-white text-sm font-semibold uppercase">النشاط</th>
+                            <th class="px-6 py-4 text-white text-sm font-semibold uppercase">العضو</th>
+                            <th class="px-6 py-4 text-white text-sm font-semibold uppercase">النوع</th>
+                            <th class="px-6 py-4 text-white text-sm font-semibold uppercase">التاريخ</th>
+                            <th class="px-6 py-4 text-white text-sm font-semibold uppercase">الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activities-table-body" class="divide-y divide-gray-200">
+                        @forelse($notifications as $notification)
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="px-6 py-4 text-gray-700">{{ $notification->description }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <img src="{{ $notification->user->profile->profile_photo ?? asset('images/default-avatar.png') }}"
+                                             class="rounded-full w-10 h-10 mr-3 object-cover border-2 border-blue-200"
+                                             alt="{{ $notification->user->name }}">
+                                        <span class="text-gray-800 font-medium">{{ $notification->user->name }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold text-white bg-{{ $notification->type_color }}">
+                                        {{ $notification->type_name }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">{{ $notification->created_at->diffForHumans() }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold text-white bg-{{ $notification->status_color }}">
+                                        {{ $notification->status_name }}
+                                    </span>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($latestActivities as $activity)
-                                <tr class="border-b hover:bg-gray-50 transition">
-                                    <td class="px-4 py-3">{{ $activity->description }}</td>
-                                    <td class="px-4 py-3 flex items-center">
-                                        <img src="{{ $activity->user->profile->profile_photo ?? asset('images/default-avatar.png') }}"
-                                             class="rounded-full w-10 h-10 mr-3 object-cover"
-                                             alt="{{ $activity->user->name }}">
-                                        <span>{{ $activity->user->name }}</span>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                            <span class="px-2 py-1 rounded-full text-xs text-white bg-{{ $activity->type_color }}">
-                                                {{ $activity->type_name }}
-                                            </span>
-                                    </td>
-                                    <td class="px-4 py-3 text-gray-600">{{ $activity->created_at->diffForHumans() }}</td>
-                                    <td class="px-4 py-3">
-                                            <span class="px-2 py-1 rounded-full text-xs text-white bg-{{ $activity->status_color }}">
-                                                {{ $activity->status_name }}
-                                            </span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-6 text-gray-500">لا توجد نشاطات حديثة</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endcan
-
-        <!-- الإجراءات السريعة -->
-            @canany(['create-member', 'create-session', 'create-trainer', 'create-plans'])
-                <div class="bg-white shadow-lg rounded-2xl p-6">
-                    <h4 class="font-semibold text-xl text-gray-800 mb-6">إجراءات سريعة</h4>
-                    <div class="space-y-4">
-                        @can('create-member')
-                            <a href="{{route('admin.memberships.create')}}" class="block w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
-                                <i class="bi bi-person-plus ml-2"></i>إضافة عضو جديد
-                            </a>
-                        @endcan
-                        @can('create-session')
-                            <a href="{{route('admin.sessions.create')}}" class="block w-full bg-green-500 hover:bg-green-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
-                                <i class="bi bi-calendar-plus ml-2"></i>إنشاء جلسة تدريبية
-                            </a>
-                        @endcan
-                        @can('create-trainer')
-                            <a href="{{route('admin.trainers.create')}}" class="block w-full bg-purple-500 hover:bg-purple-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
-                                <i class="bi bi-person-workspace ml-2"></i>إضافة مدرب جديد
-                            </a>
-                        @endcan
-                       @can('create-plans')
-                           <a href="{{route('admin.membership-plans.create')}}" class="block w-full bg-gradient-to-br from-yellow-500 to-yellow-700 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg">
-                               <i class="bi bi-person-check ml-2"></i>إضافة خطة عضوية
-                           </a>
-                       @endcan
-
-                    </div>
-                </div>
-            @endcanany
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-8 text-gray-500">
+                                    <i class="bi bi-inbox text-4xl text-gray-400 mb-2"></i>
+                                    <p class="text-lg">لا توجد نشاطات حديثة</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
+    @endcan
+
+    <!-- الإجراءات السريعة -->
+    @canany(['create-member', 'create-session', 'create-trainer', 'create-plans'])
+        <div class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-300 hover:shadow-2xl">
+            <h4 class="font-semibold text-2xl text-gray-800 mb-6 flex items-center">
+                <i class="bi bi-lightning text-yellow-500 text-3xl mr-3"></i>
+                إجراءات سريعة
+            </h4>
+            <div class="space-y-4">
+                @can('create-member')
+                    <a href="{{ route('admin.memberships.create') }}" class="block w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <i class="bi bi-person-plus text-lg mr-2"></i>
+                        إضافة عضو جديد
+                    </a>
+                @endcan
+                @can('create-session')
+                    <a href="{{ route('admin.sessions.create') }}" class="block w-full bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <i class="bi bi-calendar-plus text-lg mr-2"></i>
+                        إنشاء جلسة تدريبية
+                    </a>
+                @endcan
+                @can('create-trainer')
+                    <a href="{{ route('admin.trainers.create') }}" class="block w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <i class="bi bi-person-workspace text-lg mr-2"></i>
+                        إضافة مدرب جديد
+                    </a>
+                @endcan
+                @can('create-plans')
+                    <a href="{{ route('admin.membership-plans.create') }}" class="block w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg py-3 px-4 text-center transition duration-300 ease-in-out transform hover:scale-105 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <i class="bi bi-person-check text-lg mr-2"></i>
+                        إضافة خطة عضوية
+                    </a>
+                @endcan
+            </div>
+        </div>
+    @endcanany
+</div>
     </div>
 @endsection
 
@@ -308,4 +320,68 @@
             @endcan
         });
     </script>
+
+ <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+ <script>
+     const pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+         cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+     });
+
+     const channel = pusher.subscribe('notifications');
+
+          channel.bind('user.registered', function(data) {
+              addActivityToTable(data);
+          });
+
+     channel.bind('membership.registered', function(data) {
+         addActivityToTable(data);
+     });
+
+     channel.bind('membershipPackage.registered', function(data) {
+              addActivityToTable(data);
+          });
+
+     channel.bind('training.session.created', function(data) {
+         addActivityToTable(data);
+     });
+
+     channel.bind('session.created', function(data) {
+         addActivityToTable(data);
+     });
+
+     function addActivityToTable(data) {
+         const tableBody = document.getElementById('activities-table-body');
+
+         const newRow = `
+             <tr class="border-b hover:bg-gray-50 transition">
+                 <td class="px-4 py-3">${data.description}</td>
+                 <td class="px-4 py-3 flex items-center">
+                     <img src="${data.user.profile_photo || '{{ asset('images/default-avatar.png') }}'}"
+                          class="rounded-full w-10 h-10 mr-3 object-cover"
+                          alt="${data.user.name}">
+                     <span>${data.user.name}</span>
+                 </td>
+                 <td class="px-4 py-3">
+                     <span class="px-2 py-1 rounded-full text-xs text-white bg-${data.type_color}">
+                         ${data.type_name}
+                     </span>
+                 </td>
+                 <td class="px-4 py-3 text-gray-600">${data.created_at}</td>
+                 <td class="px-4 py-3">
+                     <span class="px-2 py-1 rounded-full text-xs text-white bg-${data.status_color}">
+                         ${data.status_name}
+                     </span>
+                 </td>
+             </tr>
+         `;
+
+         tableBody.insertAdjacentHTML('afterbegin', newRow);
+
+         // إزالة الرسالة "لا توجد نشاطات حديثة" إذا كانت موجودة
+         const emptyRow = tableBody.querySelector('tr td[colspan="5"]');
+         if (emptyRow) {
+             emptyRow.remove();
+         }
+     }
+ </script>
 @endpush
