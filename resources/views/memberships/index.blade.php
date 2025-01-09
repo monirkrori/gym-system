@@ -86,6 +86,7 @@
 @endpush
 
 @section('content')
+
     <div class="container-fluid">
         <!-- Header Section with Permissions Check -->
         @can('view-member')
@@ -124,6 +125,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Error Messages -->
             @if ($errors->any())
@@ -192,6 +194,39 @@
                 @endcan
             </div>
 
+             <div class="card mb-4">
+                            <div class="card-body">
+                                <form method="GET" action="{{ route('admin.memberships.index') }}" class="row g-3">
+                                    <div class="col-md-4">
+                                        <input type="text" name="search" class="form-control" placeholder="بحث باسم العضو أو الحالة" value="{{ request('search') }}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select name="status" class="form-select">
+                                            <option value="">كل الحالات</option>
+                                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>نشط</option>
+                                            <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>منتهي</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select name="plan_id" class="form-select">
+                                            <option value="">كل الخطط</option>
+                                            @foreach($plans as $plan)
+                                                <option value="{{ $plan->id }}" {{ request('plan_id') == $plan->id ? 'selected' : '' }}>
+                                                    {{ $plan->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-search"></i> بحث
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
             <!-- Main Content Card -->
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
@@ -224,7 +259,13 @@
                                         </div>
                                     </td>
                                     <td>{{ $membership->plan?->name}}</td>
-                                    <td>{{ $membership->package?->name}}</td>
+                                    <td>
+                                        @if($membership->package_id)
+                                            {{ $membership->package->name }}
+                                        @else
+                                            لا توجد حزمة تدريبية
+                                        @endif
+                                    </td>
                                     <td>{{\Carbon\Carbon::parse($membership->start_date)->format('Y-m-d')}}</td>
                                     <td>{{\Carbon\Carbon::parse($membership->end_date)->format('Y-m-d')}}</td>
                                     <td>

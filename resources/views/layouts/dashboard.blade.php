@@ -243,15 +243,6 @@
                             </a>
                         </li>
                     @endcan
-
-                    @can('mange-reports')
-                        <li class="nav-item">
-                            <a href="/admin/dashboard/reports" class="nav-link">
-                                <i class="bi bi-graph-up"></i>
-                                التقارير
-                            </a>
-                        </li>
-                    @endcan
                 </ul>
             </nav>
         </div>

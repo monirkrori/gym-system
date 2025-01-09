@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\dashboard\DashboardController;
-use App\Http\Controllers\dashboard\EquipmentController;
-use App\Http\Controllers\dashboard\MealPlanController;
-use App\Http\Controllers\dashboard\MembershipPackageController;
-use App\Http\Controllers\dashboard\MembershipPlanController;
-use App\Http\Controllers\dashboard\ProfileController;
-use App\Http\Controllers\dashboard\TrainerController;
-use App\Http\Controllers\dashboard\TrainingSessionController;
-use App\Http\Controllers\dashboard\UserMembershipController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\EquipmentController;
+use App\Http\Controllers\Dashboard\MealPlanController;
+use App\Http\Controllers\Dashboard\MembershipPackageController;
+use App\Http\Controllers\Dashboard\MembershipPlanController;
+use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\TrainerController;
+use App\Http\Controllers\Dashboard\TrainingSessionController;
+use App\Http\Controllers\Dashboard\UserMembershipController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
@@ -16,6 +16,7 @@ use App\Models\MembershipPackage;
 use Illuminate\Support\Facades\Route;
 
 /*
+ *
 |--------------------------------------------------------------------------
 | admin Routes
 |--------------------------------------------------------------------------
@@ -32,8 +33,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        //..........................................Activity Route.........................................................
-        Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
         //..........................................Members Route.........................................................
         Route::resource('memberships', UserMembershipController::class);
         Route::get('/memberships.xlsx', [UserMembershipController::class, 'exportExcel'])->name('memberships.exports-excel');

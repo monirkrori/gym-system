@@ -16,9 +16,9 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",
-        "mpdf/mpdf": "*",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^6.10",
+        "spatie/laravel-query-builder": "^6.3",
         "symfony/http-client": "^7.1",
         "symfony/mailgun-mailer": "^7.1"
     },

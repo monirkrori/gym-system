@@ -7,8 +7,8 @@ use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\dashboard\StoreUserRequest;
-use App\Http\Requests\dashboard\UpdateUserRequest;
+use App\Http\Requests\Dashboard\StoreUserRequest;
+use App\Http\Requests\Dashboard\UpdateUserRequest;
 use App\Http\Requests\UpdateProfilePictureRequest;
 
 class UserController extends Controller

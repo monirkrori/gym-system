@@ -121,7 +121,7 @@
                     <i class="bi bi-activity text-blue-500 text-3xl mr-3"></i>
                     آخر النشاطات
                 </h4>
-               
+
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
