@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->integer('remaining_sessions')->default(0);
             $table->enum('status', ['active', 'expired', 'cancelled']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
