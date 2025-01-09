@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
@@ -15,7 +15,11 @@ class AuthController extends Controller
 {
     use ApiResponseTrait;
 
-    // Register a new user
+    /**
+     * Register a new user.
+     *
+     * @param RegisterRequest $request The validated registration request containing name, email, and password.
+     */
     public function register(RegisterRequest $request)
     {
         // Handle the profile photo upload if provided
@@ -24,8 +28,6 @@ class AuthController extends Controller
             // Store the uploaded image on 'public' disk and return the path
             $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
         }
-
-        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -33,35 +35,42 @@ class AuthController extends Controller
             'profile_photo' => $profilePhotoPath, // Store the image path in the database
         ]);
 
-        //send email
+        // Attempt to send an email verification notification
         try {
             $user->sendEmailVerificationNotification();
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to send verification email. Please try again.', 500);
         }
-        event(new UserRegistered($user));
 
-        // Construct full URL to the profile photo if it exists
+        // Fire an event for user registration (e.g., for logging or other actions)
+        event(new UserRegistered($user));
+        
         if ($user->profile_photo) {
             $user->profile_photo_url = asset('storage/' . $user->profile_photo);
         }
-        
-        return $this->successResponse($user, 'Register successfully, please verify your email.');
+        return $this->successResponse($user, 'Registered successfully. Please verify your email.');
     }
 
-    // Login a user
+    /**
+     * Log in a user.
+     *
+     * @param LoginRequest $request The validated login request containing email and password.
+     */
     public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
 
+        // Validate the provided credentials
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->errorResponse('Invalid credentials', 401);
         }
 
+        // Check if the user's email is verified
         if (!$user->hasVerifiedEmail()) {
             return $this->errorResponse('Please verify your email first.', 403);
         }
 
+        // Generate an access token for the user
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return $this->successResponse([
@@ -70,14 +79,21 @@ class AuthController extends Controller
         ], 'Login successful');
     }
 
+    /**
+     * Resend the email verification notification.
+     *
+     * @param Request $request The current HTTP request.
+     */
     public function resendVerificationEmail(Request $request)
     {
         $user = $request->user();
 
+        // Check if the user's email is already verified
         if ($user->hasVerifiedEmail()) {
             return $this->errorResponse('Your email is already verified.', 400);
         }
 
+        // Attempt to resend the email verification notification
         try {
             $user->sendEmailVerificationNotification();
         } catch (\Exception $e) {
@@ -87,9 +103,14 @@ class AuthController extends Controller
         return $this->successResponse(null, 'Verification email resent successfully.');
     }
 
-    // Logout a user
+    /**
+     * Log out the currently authenticated user.
+     *
+     * @param Request $request The current HTTP request.
+     */
     public function logout(Request $request)
     {
+        // Revoke the user's current access token
         $request->user()->currentAccessToken()->delete();
 
         return $this->successResponse(null, 'Logged out successfully');

@@ -83,6 +83,32 @@
             </div>
         </div>
 
+        <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <form action="{{ route('admin.membership-packages.index') }}" method="GET" class="row g-3">
+                            <div class="col-md-4">
+                                <input type="text" name="name" class="form-control" placeholder="ابحث عن اسم الحزمة..." value="{{ request('search') }}">
+                            </div>
+                            <div class="col-md-4">
+                                <select name="status" class="form-select">
+                                    <option value="">جميع الحالات</option>
+                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>نشطة</option>
+                                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>غير نشطة</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-search"></i> فلترة
+                                </button>
+                                <a href="{{ route('admin.membership-packages.index') }}" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-clockwise"></i> إعادة تعيين
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
         <!-- Main Table -->
         <div class="card border-0 shadow-sm">
             <div class="card-body">

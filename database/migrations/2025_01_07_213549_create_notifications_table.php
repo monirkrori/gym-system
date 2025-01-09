@@ -10,14 +10,14 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('description'); // وصف النشاط
-            $table->unsignedBigInteger('user_id')->nullable(); // المستخدم المرتبط بالنشاط
-            $table->string('type_name'); // نوع النشاط (مثل "عضوية جديدة")
-            $table->string('type_color'); // لون النوع
-            $table->string('status_name'); // حالة النشاط (مثل "مكتمل")
-            $table->string('status_color'); // لون الحالة
-            $table->timestamp('deleted_at');//تاريخ الحذف
-            $table->timestamps(); // تاريخ الإنشاء والتحديث
+            $table->string('description');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('type_name');
+            $table->string('type_color');
+            $table->string('status_name');
+            $table->string('status_color');
+            $table->timestamps();
+            $table->softDeletes();
 
             // Foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

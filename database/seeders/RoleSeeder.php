@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -17,40 +16,28 @@ class RoleSeeder extends Seeder
         $admin = Role::create(['name' => 'admin']);
         $trainer = Role::create(['name' => 'trainer']);
         $member = Role::create(['name' => 'member']);
-        $visitor = Role::create(['name' => 'visitor']);
 
+        // Admin permissions (all-inclusive)
         $admin->givePermissionTo([
-            //permissions to trainers
             'view-trainer',
             'create-trainer',
             'edit-trainer',
             'delete-trainer',
-
-            //permissions to training sessions
             'view-sessions',
             'create-sessions',
             'update-sessions',
             'delete-sessions',
-
-            //permissions to equipments
-            'view_equipment',
-            //permissions to booking
             'book-session',
             'track-attendance',
-            //permissions to membership-package
             'manage-membership-package',
-            //permissions to membership-plan
             'manage-membership-plan',
-            //permissions to members
             'view-membership',
             'create-membership',
             'edit-membership',
             'delete-membership',
-
             'view-revenue',
             'view-reports',
             'generate-reports',
-
             'manage-meal-plans',
             'view-meal-plans',
             'subscribe-meal-plans',
@@ -58,33 +45,37 @@ class RoleSeeder extends Seeder
             'view-schedule',
             'view-activities',
             'manage-activities',
-            'view-schedule',
-            'view-activities',
-            'manage-activities',
             'view-attendance',
             'view-membership-stats',
             'view-package-distribution',
-            'view-activities',
             'list-activities',
             'view_dashboard',
             'view_training_sessions',
-            'view_equipment',
-            'view_memberships'
-
+            'view_memberships',
         ]);
 
+        // Trainer permissions
         $trainer->givePermissionTo([
-            //permissions to training sessions
+            'view-trainer',
             'view-sessions',
             'create-sessions',
             'update-sessions',
             'delete-sessions',
             'track-attendance',
+            'view-schedule',
+            'view-activities',
+            'manage-activities',
         ]);
 
+        // Member permissions
         $member->givePermissionTo([
             'view-sessions',
             'book-session',
+            'view-trainer',
+            'view-meal-plans',
+            'subscribe-meal-plans',
+            'view-statistics',
+            'view-schedule',
         ]);
 
     }

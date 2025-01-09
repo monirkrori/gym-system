@@ -102,6 +102,7 @@
                 </div>
             </div>
 
+
             <!-- Cards Section -->
             <div class="row g-4 mb-4">
                 <div class="col-12 col-md-6">
@@ -137,6 +138,33 @@
                 </div>
             </div>
 
+               <div class="card border-0 shadow-sm mb-4">
+                                      <div class="card-body">
+                                          <form action="{{ route('admin.sessions.index') }}" method="GET" class="row g-3">
+                                              <div class="col-md-4">
+                                                  <input type="text" name="name" class="form-control" placeholder="ابحث عن اسم الجلسة التدريبية..." value="{{ request('search') }}">
+                                              </div>
+                                         <div class="col-md-4">
+                                             <select name="status" class="form-select">
+                                                 <option value="">جميع الحالات</option>
+                                                 <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>نشط</option>
+                                                 <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>منتهية</option>
+                                                 <option value="scheduled" {{ request('status') == 'scheduled' ? 'selected' : '' }}>مجدولة</option>
+                                             </select>
+                                         </div>
+                                              <div class="col-md-4 text-md-end">
+                                                  <button type="submit" class="btn btn-primary">
+                                                      <i class="bi bi-search"></i> فلترة
+                                                  </button>
+                                                  <a href="{{ route('admin.equipments.index') }}" class="btn btn-secondary">
+                                                      <i class="bi bi-arrow-clockwise"></i> إعادة تعيين
+                                                  </a>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+
+
             <!-- Main Table -->
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
@@ -161,12 +189,25 @@
                                     <td>{{ $session->trainer->user->name }}</td>
                                     <td>{{ $session->max_capacity }}</td>
                                     <td>{{ $session->current_capacity }}</td>
-
-                                    <td>
-                                        <span class="badge badge-status {{ $session->status === 'active' ? 'bg-success' : 'bg-secondary' }}">
-                                            {{ $session->status === 'scheduled' ? 'نشطة' : 'مجدولة' }}
-                                        </span>
-                                    </td>
+<td>
+    <span class="badge badge-status
+        @if ($session->status === 'active')
+            bg-success
+        @elseif ($session->status === 'expired')
+            bg-danger
+        @elseif ($session->status === 'scheduled')
+            bg-warning
+        @endif
+    ">
+        @if ($session->status === 'active')
+            نشطة
+        @elseif ($session->status === 'expired')
+            منتهية
+        @elseif ($session->status === 'scheduled')
+            مجدولة
+        @endif
+    </span>
+</td>
                                     <td>
                                         <div class="action-buttons d-flex gap-1">
                                             <a href="{{ route('admin.sessions.show', $session->id) }}" class="btn btn-sm btn-info" title="عرض">

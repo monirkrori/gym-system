@@ -18,6 +18,7 @@
                 <i class="bi bi-person-circle me-2"></i>
             @endif
             عرض المدرب: {{ $trainer->user->name }}
+
         </h1>
         <a href="{{ route('admin.trainers.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left-circle me-1"></i> العودة إلى القائمة

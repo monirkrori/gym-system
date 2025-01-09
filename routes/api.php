@@ -1,17 +1,19 @@
 <?php
 
 
-use App\Http\Controllers\Api\auth\AuthController;
-use App\Http\Controllers\Api\auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Member\GetTrainerController;
+use App\Http\Controllers\Api\Member\GetTrainingSessionController;
+use App\Http\Controllers\Api\Member\SubscribeController;
 use App\Http\Controllers\Api\Trainer\TrainerAttendanceController;
 use App\Http\Controllers\Api\Trainer\TrainingSessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\member\RatingController;
-use App\Http\Controllers\Api\member\BookingController;
-use App\Http\Controllers\Api\member\MealPlanController;
-use App\Http\Controllers\Api\member\AttendanceLogController;
-use App\Http\Controllers\Api\member\MembershipController;
+use App\Http\Controllers\Api\Member\RatingController;
+use App\Http\Controllers\Api\Member\BookingController;
+use App\Http\Controllers\Api\Member\MealPlanController;
+use App\Http\Controllers\Api\Member\AttendanceLogController;
 
 
 /*
@@ -46,13 +48,16 @@ Route::prefix('auth')->group(function () {
 
 //---TrainingSession Routes----
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('sessions', [TrainingSessionController::class, 'listSessions']);
-    Route::get('sessions/{id}', [TrainingSessionController::class, 'show']);
+    Route::get('sessions', [GetTrainingSessionController::class, 'listSessions']);
+    Route::get('sessions/{id}', [GetTrainingSessionController::class, 'show']);
 });
 
-//---UserMembership Routes-----
-Route::post('subscribe', [MembershipController::class, 'subscribeToMembership'])->middleware('auth:sanctum');
-Route::post('subscribe-package', [MembershipController::class, 'subscribeToPackage'])->middleware('auth:sanctum');
+//---subscribe Routes-----
+Route::post('subscribe', [SubscribeController::class, 'subscribeToMembership'])->middleware('auth:sanctum');
+Route::post('subscribe-package', [SubscribeController::class, 'subscribeToPackage'])->middleware('auth:sanctum');
+
+//get trainers
+Route::get('trainers-list',[GetTrainerController::class,'listTrainer']);
 
 //---Booking Routes------------
 Route::middleware('auth:sanctum')->group(function () {
@@ -78,8 +83,6 @@ Route::post('/attendance', [AttendanceLogController::class, 'store'])->middlewar
 Route::post('/subscribe-meal-plan', [MealPlanController::class, 'subscribe'])->middleware('auth:sanctum'); // Subscribe to a meal plan
 Route::get('/show-meal-plan/{id}', [MealPlanController::class, 'show'])->middleware('auth:sanctum'); // Subscribe to a meal plan
 //Route::get('/user/{userId}/meal-plans', [MealPlanController::class, 'getUserMealPlans']); // Get user's subscribed meal plans
-
-
 
 
 Route::prefix('trainer')->middleware('auth:sanctum')->group(function () {

@@ -32,8 +32,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        //..........................................Activity Route.........................................................
-        Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
         //..........................................Members Route.........................................................
         Route::get('/memberships/deleted', [UserMembershipController::class, 'deleted'])->name('memberships.deleted');
         Route::put('memberships/{membership}/restore', [UserMembershipController::class, 'restore'])->name('memberships.restore');

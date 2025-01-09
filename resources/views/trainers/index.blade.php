@@ -154,6 +154,31 @@
                 </div>
             </div>
 
+              <div class="card border-0 shadow-sm mb-4">
+                          <div class="card-body">
+                              <form action="{{ route('admin.trainers.index') }}" method="GET" class="row g-3">
+                                  <div class="col-md-4">
+                                      <input type="text" name="search" class="form-control" placeholder="ابحث عن اسم المدرب..." value="{{ request('search') }}">
+                                  </div>
+                                  <div class="col-md-4">
+                                      <select name="status" class="form-select">
+                                          <option value="">جميع الحالات</option>
+                                          <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>نشط</option>
+                                          <option value="unavailable" {{ request('status') == 'unavailable' ? 'selected' : '' }}>غير نشط</option>
+                                      </select>
+                                  </div>
+                                  <div class="col-md-4 text-md-end">
+                                      <button type="submit" class="btn btn-primary">
+                                          <i class="bi bi-search"></i> فلترة
+                                      </button>
+                                      <a href="{{ route('admin.equipments.index') }}" class="btn btn-secondary">
+                                          <i class="bi bi-arrow-clockwise"></i> إعادة تعيين
+                                      </a>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+
             <!-- Main Table -->
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
@@ -183,6 +208,7 @@
                                              height="80"
                                              alt="صورة المدرب"
                                              style="object-fit: cover;">
+
                                             <div>
                                                 <div class="fw-bold">{{ $trainer->user->name }}</div>
                                             </div>

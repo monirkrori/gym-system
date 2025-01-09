@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\dashboard\StoreRoleRequest;
-use App\Http\Requests\dashboard\UpdateRoleRequest;
+use App\Http\Requests\Dashboard\StoreRoleRequest;
+use App\Http\Requests\Dashboard\UpdateRoleRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;

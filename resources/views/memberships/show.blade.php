@@ -98,6 +98,7 @@
                         <!-- User Profile -->
                         <div class="col-md-3 text-center mb-4">
                             <img src="{{  asset('storage/' . $membership->user->profile_photo) }}" alt="User Image" class="profile-img mb-3">
+
                             <h4 class="fw-bold">{{ $membership->user?->name }}</h4>
                             <p class="text-muted">{{ $membership->user?->email }}</p>
                         </div>
