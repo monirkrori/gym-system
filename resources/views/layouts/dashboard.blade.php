@@ -215,27 +215,31 @@
                                 الأجهزة الرياضية
                             </a>
                         </li>
+                    @endcan
 
+                    @can('mange-memberships')
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="bi bi-card-checklist me-2"></i>
-                                العضويات
+                            <a href="/admin/membership-plans" class="nav-link">
+                                <i class="bi bi-card-checklist"></i>
+                                خطط العضويات
                             </a>
                         </li>
                     @endcan
 
+                    @can('mange-membership-packages')
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="bi bi-cup-hot me-2"></i>
+                            <a href="/admin/membership-packages" class="nav-link">
+                                <i class="bi bi-box-seam"></i>
+                                الحزم التدريبية
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('mange-meal-plans')
+                        <li class="nav-item">
+                            <a href="/admin/meal-plans" class="nav-link">
+                                <i class="bi bi-cup-hot"></i>
                                 خطط الوجبات
-                            </a>
-                        </li>
-                    @endcan
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="bi bi-graph-up me-2"></i>
-                                التقارير
                             </a>
                         </li>
                     @endcan
@@ -256,9 +260,9 @@
                         <ul class="navbar-nav ms-auto align-items-center">
                             <!-- User Menu -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                    <img src="{{ auth()->user()->profile->profile_photo ?? asset('images/default-avatar.png') }}"
-                                         class="rounded-circle me-2"
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <img src="{{ auth()->user()->profile_picture ?? '#' }}"
+                                         class="rounded-circle me-2 shadow-sm"
                                          alt="صورة المستخدم"
                                          width="40"
                                          height="40"

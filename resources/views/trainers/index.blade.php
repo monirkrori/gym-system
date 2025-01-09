@@ -209,6 +209,12 @@
                                              alt="صورة المدرب"
                                              style="object-fit: cover;">
 
+
+                                            <img src="{{ $trainer->profile_photo_url ?? asset('images/default-avatar.png') }}"
+                                                 class="rounded-circle me-2"
+                                                 width="40"
+                                                 height="40"
+                                                 alt="صورة المدرب">
                                             <div>
                                                 <div class="fw-bold">{{ $trainer->user->name }}</div>
                                             </div>

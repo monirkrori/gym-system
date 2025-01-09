@@ -97,7 +97,11 @@
                     <div class="row">
                         <!-- User Profile -->
                         <div class="col-md-3 text-center mb-4">
+
                             <img src="{{  asset('storage/' . $membership->user->profile_photo) }}" alt="User Image" class="profile-img mb-3">
+
+
+                            <img src="{{ $membership->user?->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="User Image" class="profile-img mb-3">
 
                             <h4 class="fw-bold">{{ $membership->user?->name }}</h4>
                             <p class="text-muted">{{ $membership->user?->email }}</p>
