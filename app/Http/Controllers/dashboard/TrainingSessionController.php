@@ -14,7 +14,6 @@ class TrainingSessionController extends Controller
 {
     public function index()
     {
-        // إجمالي عدد الجلسات
         $totalSessions = TrainingSession::count();
         $sessions = TrainingSession::paginate(10);
 

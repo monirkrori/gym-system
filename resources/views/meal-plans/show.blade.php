@@ -25,7 +25,7 @@
             </a>
 
             <div>
-                @can('manage-meal-plans') 
+                @can('manage-meal-plans')
                     <a href="{{ route('admin.meal-plans.edit', $mealPlan->id) }}" class="btn btn-warning">
                         <i class="bi bi-pencil me-1"></i> تعديل
                     </a>

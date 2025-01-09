@@ -6,7 +6,18 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">
-            <i class="bi bi-person-circle me-2"></i> عرض المدرب: {{ $trainer->user->name }}
+            <!-- Check if the trainer has a profile photo -->
+            @if ($trainer->user->profile_photo)
+                <!-- Display the profile photo if available -->
+                <img src="{{ asset('storage/' . $trainer->user->profile_photo) }}"
+                     class="rounded-circle me-2"
+                     width="110" height="110"
+                     alt="صورة المدرب">
+            @else
+                <!-- If no profile photo, show the "person-circle" icon -->
+                <i class="bi bi-person-circle me-2"></i>
+            @endif
+            عرض المدرب: {{ $trainer->user->name }}
         </h1>
         <a href="{{ route('admin.trainers.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left-circle me-1"></i> العودة إلى القائمة

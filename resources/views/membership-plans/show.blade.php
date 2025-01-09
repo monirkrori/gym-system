@@ -28,7 +28,7 @@
 
             <div>
                 @can('manage-membership-plan')
-                
+
                     <a href="{{ route('admin.membership-plans.edit', $membershipPlan->id) }}" class="btn btn-warning">
                         <i class="bi bi-pencil me-1"></i> تعديل
                     </a>

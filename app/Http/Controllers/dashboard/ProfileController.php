@@ -6,6 +6,7 @@ use function view;
 use Illuminate\View\View;
 use App\Helpers\ImageHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -37,15 +38,17 @@ class ProfileController extends Controller
             $imagePath = ImageHelper::uploadImage($request->file('profile_photo'), 'profile_photos');
             $data['profile_photo'] = $imagePath;
         }
-
         // Fill the user with the updated data
         $user->fill($data);
+        $user->save();
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
         $user->save();
+        Log::info('User after save: ', $user->toArray());
+
 
         return Redirect::route('admin.profile.edit')->with('status', 'profile-updated');
     }

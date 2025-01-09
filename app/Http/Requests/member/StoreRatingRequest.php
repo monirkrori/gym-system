@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\member;
 
+
 use App\Models\Trainer;
 use App\Models\TrainingSession;
 use Illuminate\Foundation\Http\FormRequest;

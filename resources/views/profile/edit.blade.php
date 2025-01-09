@@ -38,6 +38,12 @@
                 <div class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
                     <div class="text-center mb-6">
                         <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full flex items-center justify-center text-white text-4xl font-bold">
+                            <img src="{{  asset('storage/' . auth()->user()->profile_photo) }}"
+                                         class="rounded-circle me-5 shadow-sm"
+                                         alt="صورة المستخدم"
+                                         width="130"
+                                         height="130"
+                                         style="object-fit: cover; border: 2px solid var(--luxury-gold);">
                             {{ substr($user->name, 0, 1) }}
                         </div>
                         <h2 class="text-xl font-bold text-gray-800 dark:text-white">{{ $user->name }}</h2>

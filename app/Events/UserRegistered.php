@@ -18,7 +18,6 @@ class UserRegistered implements ShouldBroadcast
     {
         $this->user = $user;
 
-        // تخزين الإشعار في قاعدة البيانات
         Notification::create([
             'description' => 'تم إنشاء حساب جديد: ' . $user->name,
             'user_id' => $user->id,

@@ -21,7 +21,7 @@
             <div class="card-body">
                 <form action="{{ route('admin.membership-plans.update', $membershipPlan->id) }}" method="POST">
                     @csrf
-                    @method('PUT') 
+                    @method('PUT')
 
                     <div class="row g-3">
                         <div class="col-md-6">

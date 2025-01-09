@@ -18,11 +18,19 @@ class AuthController extends Controller
     // Register a new user
     public function register(RegisterRequest $request)
     {
-        //create user
+        // Handle the profile photo upload if provided
+        $profilePhotoPath = null;
+        if ($request->hasFile('profile_photo')) {
+            // Store the uploaded image on 'public' disk and return the path
+            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
+
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'profile_photo' => $profilePhotoPath, // Store the image path in the database
         ]);
 
         //send email
@@ -31,8 +39,13 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to send verification email. Please try again.', 500);
         }
-        
         event(new UserRegistered($user));
+
+        // Construct full URL to the profile photo if it exists
+        if ($user->profile_photo) {
+            $user->profile_photo_url = asset('storage/' . $user->profile_photo);
+        }
+        
         return $this->successResponse($user, 'Register successfully, please verify your email.');
     }
 

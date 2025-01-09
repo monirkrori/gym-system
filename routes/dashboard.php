@@ -35,7 +35,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         //..........................................Activity Route.........................................................
         Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
         //..........................................Members Route.........................................................
+        Route::get('/memberships/deleted', [UserMembershipController::class, 'deleted'])->name('memberships.deleted');
+        Route::put('memberships/{membership}/restore', [UserMembershipController::class, 'restore'])->name('memberships.restore');
+        Route::delete('memberships/{membership}/force-delete', [UserMembershipController::class, 'forceDelete'])->name('memberships.force-delete');
         Route::resource('memberships', UserMembershipController::class);
+        Route::get('/memberships/deleted', [UserMembershipController::class, 'deleted'])->name('memberships.deleted');
         Route::get('/memberships.xlsx', [UserMembershipController::class, 'exportExcel'])->name('memberships.exports-excel');
         Route::get('exports/memberships-pdf', [UserMembershipController::class, 'exportPdf'])->name('memberships.export.pdf');
         //..........................................Trainers Route.........................................................

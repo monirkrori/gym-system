@@ -75,4 +75,30 @@ class UserMembershipService
         $membership->delete();
     }
 
+    public function restoreMembership($id)
+    {
+        $membership = UserMembership::withTrashed()->findOrFail($id);
+
+        $membership->restore();
+    }
+
+    public function forceDeleteMembership($id)
+    {
+        $membership = UserMembership::withTrashed()->findOrFail($id); 
+
+        $membership->forceDelete();
+    }
+
+    public function deletedMemberships()
+    {
+        $deletedMemberships = UserMembership::onlyTrashed()->get();
+        $package = MembershipPackage::get();
+        $plan = MembershipPlan::get();
+        return [
+            'deletedMemberships' => $deletedMemberships,
+            'package' => $package,
+            'plan' => $plan
+        ];
+    }
+
 }

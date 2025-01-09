@@ -83,6 +83,25 @@ class UserMembershipController extends Controller
         return redirect()->route('admin.memberships.index')->with('success', 'تم حذف العضوية بنجاح!');
     }
 
+    public function restore($id)
+    {
+        $this->membershipService->restoreMembership($id);
+        return redirect()->route('admin.memberships.index')->with('success', 'تم استعادة العضوية بنجاح!');
+    }
+
+    public function forceDelete($id)
+    {
+        $this->membershipService->forceDeleteMembership($id);
+        return redirect()->route('admin.memberships.index')->with('success', 'تم حذف العضوية بشكل نهائي!');
+    }
+
+    public function deleted()
+    {
+        $data=$this->membershipService->deletedMemberships();
+        return view('memberships.deleted',$data);
+    }
+
+
     public function exportExcel()
     {
         return Excel::download(new UserMembershipsExport, 'memberships.xlsx');
