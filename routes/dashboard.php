@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EquipmentController;
 use App\Http\Controllers\Dashboard\MealPlanController;
@@ -16,7 +15,8 @@ use App\Http\Controllers\UserController;
 use App\Models\MembershipPackage;
 use Illuminate\Support\Facades\Route;
 
-
+/*
+ *
 |--------------------------------------------------------------------------
 | admin Routes
 |--------------------------------------------------------------------------
@@ -34,15 +34,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         //..........................................Members Route.........................................................
-
-        Route::get('/memberships/deleted', [UserMembershipController::class, 'deleted'])->name('memberships.deleted');
-        Route::put('memberships/{membership}/restore', [UserMembershipController::class, 'restore'])->name('memberships.restore');
-        Route::delete('memberships/{membership}/force-delete', [UserMembershipController::class, 'forceDelete'])->name('memberships.force-delete');
         Route::resource('memberships', UserMembershipController::class);
-        Route::get('/memberships/deleted', [UserMembershipController::class, 'deleted'])->name('memberships.deleted');
-
-        Route::resource('memberships', UserMembershipController::class);
-
         Route::get('/memberships.xlsx', [UserMembershipController::class, 'exportExcel'])->name('memberships.exports-excel');
         Route::get('exports/memberships-pdf', [UserMembershipController::class, 'exportPdf'])->name('memberships.export.pdf');
         //..........................................Trainers Route.........................................................
