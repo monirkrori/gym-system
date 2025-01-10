@@ -46,18 +46,5 @@ class MealPlanController extends Controller
         return $this->successResponse($mealPlan, 'Your meal plan retrieved successfully.');
     }
 
-//for the trainer
-    // // Get the meal plans subscribed by a user.
 
-    // public function getUserMealPlans($userId)
-    // {
-    //     $user = User::find($userId);
-    //     if (!$user) {
-    //         return $this->errorResponse('User not found.', 404);
-    //     }
-
-    //     $mealPlans = $user->mealPlans;
-
-    //     return $this->successResponse($mealPlans, 'Meal plans retrieved successfully.');
-    // }
 }

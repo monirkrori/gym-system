@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\dashboard;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\UserMembershipsExport;
 use App\Exports\UserMembershipsPdfExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\dashboard\UserMemberShipRequest;
+use App\Http\Requests\Dashboard\UserMemberShipRequest;
 use App\Models\MembershipPackage;
 use App\Models\MembershipPlan;
 use App\Models\User;
 use App\Models\UserMembership;
-use App\Services\UserMembershipService;
+use App\Services\Dashboard\UserMembershipService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -23,15 +23,18 @@ class UserMembershipController extends Controller
         $this->membershipService = $membershipService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->only(['search', 'status', 'plan_id']);
         $statistics = $this->membershipService->getMembershipStatistics();
-        $memberships = $this->membershipService->getMembershipsPaginated();
+        $memberships = $this->membershipService->getMembershipsPaginated(10, $filters);
         $totalMembers = UserMembership::count();
         $activeMembers = UserMembership::where('status', 'active')->count();
         $expiredMembers = UserMembership::where('status', 'expired')->count();
+        $packages = MembershipPackage::where('status', 'active')->get();
+        $plans = MembershipPlan::where('status', 'active')->get();
 
-        return view('memberships.index', compact('memberships', 'statistics','totalMembers','activeMembers','expiredMembers'));
+        return view('memberships.index', compact('memberships', 'statistics','totalMembers','activeMembers','expiredMembers','filters','packages','plans'));
     }
 
     public function create()
@@ -100,7 +103,6 @@ class UserMembershipController extends Controller
         $data=$this->membershipService->deletedMemberships();
         return view('memberships.deleted',$data);
     }
-
 
     public function exportExcel()
     {

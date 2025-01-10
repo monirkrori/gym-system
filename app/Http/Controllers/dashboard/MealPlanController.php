@@ -13,6 +13,16 @@ use Illuminate\Http\Request;
 
 class MealPlanController extends Controller
 {
+     /**
+     * @var FilterService
+     */
+    protected $filterService;
+
+    /**
+     * MealPlanController constructor.
+     *
+     * @param FilterService $filterService
+     */
     public function __construct(FilterService $filterService)
     {
         $this->filterService = $filterService;
