@@ -6,14 +6,12 @@ use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Models\Traits\ApiResponseTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait;
 
     /**
      * Register a new user.
@@ -22,10 +20,17 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
+        // Handle the profile photo upload if provided
+        $profilePhotoPath = null;
+        if ($request->hasFile('profile_photo')) {
+            // Store the uploaded image on 'public' disk and return the path
+            $profilePhotoPath = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'profile_photo' => $profilePhotoPath, // Store the image path in the database
         ]);
 
         // Attempt to send an email verification notification
@@ -38,6 +43,9 @@ class AuthController extends Controller
         // Fire an event for user registration (e.g., for logging or other actions)
         event(new UserRegistered($user));
 
+        if ($user->profile_photo) {
+            $user->profile_photo_url = asset('storage/' . $user->profile_photo);
+        }
         return $this->successResponse($user, 'Registered successfully. Please verify your email.');
     }
 
