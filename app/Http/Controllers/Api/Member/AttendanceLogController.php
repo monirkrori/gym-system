@@ -49,5 +49,18 @@ class AttendanceLogController extends Controller
 
         return $this->successResponse($attendance, 'Attendance recorded successfully.');
     }
+//--------------------------------------------------------------------------------//
+// for the trainer
+    // Get the attendance log for a specific user.
 
+    // public function getUserAttendance($userId)
+    // {
+    //     $attendance = AttendanceLog::where('user_id', $userId)->get();
+
+    //     if ($attendance->isEmpty()) {
+    //         return $this->errorResponse('No attendance records found for this user.');
+    //     }
+
+    //     return $this->successResponse($attendance, 'Attendance records retrieved successfully.');
+    // }
 }
