@@ -38,19 +38,13 @@
                 <div class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
                     <div class="text-center mb-6">
                         <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full flex items-center justify-center text-white text-4xl font-bold">
-                            <img src="{{  asset('storage/' . auth()->user()->profile_photo) }}"
-                                         class="rounded-circle me-5 shadow-sm"
-                                         alt="صورة المستخدم"
-                                         width="130"
-                                         height="130"
-                                         style="object-fit: cover; border: 2px solid var(--luxury-gold);">
                             {{ substr($user->name, 0, 1) }}
                         </div>
                         <h2 class="text-xl font-bold text-gray-800 dark:text-white">{{ $user->name }}</h2>
                         <p class="text-gray-500 dark:text-gray-400">{{ $user->email }}</p>
                     </div>
 
-                    <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.profile.update') }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -98,12 +92,6 @@
                                     </svg>
                                 </span>
                             </div>
-                        </div>
-
-                        {{-- Profile Photo Input --}}
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-300 mb-2">صورة الملف الشخصي</label>
-                            <input type="file" name="profile_photo" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent dark:bg-gray-700 dark:text-white transition duration-300">
                         </div>
 
                         {{-- Submit Button --}}

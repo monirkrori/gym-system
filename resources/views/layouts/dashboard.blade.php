@@ -261,7 +261,9 @@
                             <!-- User Menu -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+
                                     <img src="{{  asset('storage/' . auth()->user()->profile_photo) ?? '#' }}"
+
                                          class="rounded-circle me-2 shadow-sm"
                                          alt="صورة المستخدم"
                                          width="40"
