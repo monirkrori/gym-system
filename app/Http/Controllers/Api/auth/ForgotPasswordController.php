@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Models\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
-    use ApiResponseTrait;
 
     /**
      * Send a password reset link to the user's email.
