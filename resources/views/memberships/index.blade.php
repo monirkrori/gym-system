@@ -248,12 +248,11 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ asset('storage/' . $membership->user->profile_photo) }}"
-                                            class="rounded-circle me-3 border border-2 border-primary"
-                                            width="80"
-                                            height="80"
-                                            alt="صورة العضو"
-                                            style="object-fit: cover;">
+                                            <img src="{{ $membership->user?->profile_photo_url ?? asset('images/default-avatar.png') }}"
+                                                 class="rounded-circle me-2"
+                                                 width="40"
+                                                 height="40"
+                                                 alt="صورة العضو">
                                             <div>
                                                 <div class="fw-bold">{{ $membership->user?->name }}</div>
                                             </div>
